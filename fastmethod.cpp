@@ -27,7 +27,7 @@ void print_C(vector<CRow> &cmatrix)
 	printf("\n");
 }
 
-void grow_C(vector<pop> &poplist, vector<CRow> &cmatrix)
+void grow_C(vector<pop> &poplist, vector<CRow> &cmatrix, par_list * pars)
 {
 	vector<pop>::iterator p;
 // vector<CRow>::iterator v = cmatrix.begin();
@@ -36,7 +36,7 @@ void grow_C(vector<pop> &poplist, vector<CRow> &cmatrix)
 	CRow row;
 	double c;
 	for(p=poplist.begin(); p != --poplist.end(); p++){
-		c = C( x, p->trait );
+		c = C( x, p->trait, pars );
 		row.push_back(c);					// add to final row
 		cmatrix[v].push_back(c);			// add to last column
 		v++;
@@ -61,7 +61,7 @@ void shrink_C(vector<CRow> &cmatrix, int id)
 }
 
 
-void fast_update_rates(vector<pop> &poplist, vector<CRow> &cmatrix, int id, char type)
+void fast_update_rates(vector<pop> &poplist, vector<CRow> &cmatrix, int id, char type, par_list * pars)
 {
 	vector<pop>::iterator p;
 	vector<CRow>::iterator v;
@@ -89,23 +89,23 @@ void fast_update_rates(vector<pop> &poplist, vector<CRow> &cmatrix, int id, char
 		}
 		j++;
 		p->birth = R* p->popsize;
-		p->death = R* p->popsize * (p->compete) * Kinv( p->trait );
+		p->death = R* p->popsize * (p->compete) * Kinv( p->trait, pars );
 	}
 
 }
 
-double init_compete(vector<pop> &poplist, double y)
+double init_compete(vector<pop> &poplist, double y, par_list * pars)
 {
 	double compete = 0;
 	vector<pop>::iterator p;
 	for(p=poplist.begin(); p != poplist.end(); p++){
-		compete += p->popsize * C(y, p->trait);
+		compete += p->popsize * C(y, p->trait, pars);
 	}
 	return compete;
 }
 
 
-void event_and_rates(gsl_rng * rng, vector<pop> &poplist, double sum, vector<CRow> &cmatrix)
+void event_and_rates(gsl_rng * rng, vector<pop> &poplist, double sum, vector<CRow> &cmatrix, par_list * pars)
 {
 	vector<pop>::iterator p;
 	double threshhold = sum*gsl_rng_uniform(rng);
@@ -116,18 +116,18 @@ void event_and_rates(gsl_rng * rng, vector<pop> &poplist, double sum, vector<CRo
 	for(p=poplist.begin(); p != poplist.end(); p++){
 		cumulative += p->birth;
 		if( cumulative  > threshhold ){ 
-			if(gsl_rng_uniform(rng) > MU){
+			if(gsl_rng_uniform(rng) > pars->mu){
 				++p->popsize;
 				type = 'b';
 				who = id;
 
 			} else {
-				double y = p->trait + gsl_ran_gaussian_ziggurat(rng,SIGMA_MU);
-				double c = init_compete(poplist, y);
+				double y = p->trait + gsl_ran_gaussian_ziggurat(rng,pars->sigma_mu);
+				double c = init_compete(poplist, y, pars);
 				pop pop_i = {1, y, 1., 1., p->trait, c};
 				poplist.push_back(pop_i);
 
-				grow_C(poplist, cmatrix);
+				grow_C(poplist, cmatrix, pars);
 				type = 'b';
 				who = -1;
 
@@ -148,7 +148,7 @@ void event_and_rates(gsl_rng * rng, vector<pop> &poplist, double sum, vector<CRo
 		}
 		id++;
 	}
-	fast_update_rates(poplist, cmatrix, who, type);
+	fast_update_rates(poplist, cmatrix, who, type, pars);
 }
 
 

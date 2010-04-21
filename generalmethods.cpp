@@ -1,8 +1,8 @@
 #include "branch_vec.hh"
 
-double C(double x, double y){return exp( -gsl_pow_2(x-y)*MC );}
-double K(double x){return Ko*exp( -gsl_pow_2(x)*MK );}
-double Kinv(double x){return IK*exp( gsl_pow_2(x)*MK );}
+double C(double x, double y, par_list * pars){return exp( -gsl_pow_2(x-y)*pars->mc );}
+double K(double x, par_list * pars){return pars->ko*exp( -gsl_pow_2(x)*pars->mk );}
+double Kinv(double x, par_list * pars){return pars->ik*exp( gsl_pow_2(x)*pars->mk );}
 
 double sumrates(vector<pop> &poplist)
 {
@@ -16,14 +16,15 @@ double sumrates(vector<pop> &poplist)
 }
 
 
-double bdry(double x){return -x*(1+MC/MK)/(1-MC/MK) ; }
-int coexist(double x, double y)
+double bdry(double x, par_list * pars){return -x*(1+pars->mc/pars->mk)/(1-pars->mc/pars->mk) ; }
+
+int coexist(double x, double y, par_list * pars)
 { 
-	if( (1 - C(x,y)*K(x)/K(y) > EPSILON) && (1 - C(y,x)*K(y)/K(x) > EPSILON) ) return 1;
+	if( (1 - C(x,y, pars)*K(x, pars)/K(y, pars) > EPSILON) && (1 - C(y,x, pars)*K(y, pars)/K(x, pars) > EPSILON) ) return 1;
 	else return 0;
 }
 
-int branchcheck(vector<pop> &poplist, int threshold)
+int branchcheck(vector<pop> &poplist, int threshold, par_list * pars)
 {
 	if( poplist.size() < 2 ){ return 0; }
 	else{
@@ -31,7 +32,7 @@ int branchcheck(vector<pop> &poplist, int threshold)
 		for(p=poplist.begin(); p != poplist.end(); p++){
 			if(p->popsize > threshold ){
 				for(q=poplist.begin(); q != poplist.end(); q++){
-					if(q->popsize > threshold && coexist(p->trait,q->trait) ){
+					if(q->popsize > threshold && coexist(p->trait,q->trait, pars) ){
 						return 1;
 					}
 				}
@@ -59,7 +60,7 @@ int invade_pair(vector<pop> &poplist, int threshold, double * pair)
 	}
 }
 
-int branches(vector<pop> &poplist, int threshold, double * pair)
+int branches(vector<pop> &poplist, int threshold, double * pair, par_list * pars)
 {
 	if( poplist.size() < 2 ){ return 0; }
 	else{
@@ -67,7 +68,7 @@ int branches(vector<pop> &poplist, int threshold, double * pair)
 		for(p=poplist.begin(); p != poplist.end(); p++){
 			if(p->popsize > threshold ){
 				for(q=poplist.begin(); q != poplist.end(); q++){
-					if(q->popsize > threshold && coexist(p->trait,q->trait) ){
+					if(q->popsize > threshold && coexist(p->trait,q->trait, pars) ){
 						pair[0] = p->trait;
 						pair[1] = q->trait;
 						return 1;
@@ -78,14 +79,14 @@ int branches(vector<pop> &poplist, int threshold, double * pair)
 		return 0;
 	}
 }
-int mutual_invade(vector<pop> &poplist, int threshold)
+int mutual_invade(vector<pop> &poplist, int threshold, par_list * pars)
 {
 	vector<pop>::iterator p, q;
 	for(p=poplist.begin(); p != poplist.end(); p++){
 		if(p->popsize > threshold ){
 			for(q=poplist.begin(); q != poplist.end(); q++){
-				if(q->popsize > threshold && coexist(p->trait,q->trait) ){
-					double sq = (1 - C(p->trait,q->trait)*K(p->trait)/K(q->trait) ), sp = (1 - C(p->trait,q->trait)*K(q->trait)/K(p->trait) ) ;
+				if(q->popsize > threshold && coexist(p->trait,q->trait, pars) ){
+					double sq = (1 - C(p->trait,q->trait, pars)*K(p->trait, pars)/K(q->trait, pars) ), sp = (1 - C(p->trait,q->trait, pars)*K(q->trait, pars)/K(p->trait, pars) ) ;
 					printf("%lf\t%lf\t", GSL_MIN(sp, sq), GSL_MAX(sp, sq));
 //					if(p->popsize < q->popsize) p->parent_trait = 5; else q->parent_trait = 5; //flag the mutants
 //					if(sp < sq) p->parent_trait = 5; else q->parent_trait = 5; //flag the weaker polymorphism
