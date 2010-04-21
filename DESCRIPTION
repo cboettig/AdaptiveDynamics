@@ -1,0 +1,12 @@
+Package: BranchingTime 
+Type: C program 
+Title: Waiting Times for Evolutionary Branching 
+Version: 0.0-1
+Date: 2010-04-20
+Author: Carl Boettiger <cboettig@gmail.com>
+Maintainer: Carl Boettiger <cboettig@gmail.com>
+Description: 
+Depends: libpngwriter0-dev, libgsl0-dev
+URL: http://two.ucdavis.edu/~cboettig/software.html
+License: GPL (>= 2)
+
