@@ -4,6 +4,8 @@ double C(double x, double y, par_list * pars){return exp( -gsl_pow_2(x-y)*pars->
 double K(double x, par_list * pars){return pars->ko*exp( -gsl_pow_2(x)*pars->mk );}
 double Kinv(double x, par_list * pars){return pars->ik*exp( gsl_pow_2(x)*pars->mk );}
 
+
+
 double sumrates(vector<pop> &poplist)
 {
 	vector<pop>::iterator p;

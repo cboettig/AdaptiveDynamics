@@ -1,6 +1,7 @@
 #include "branch_vec.hh"
 #include <omp.h>
 
+/** Function for reporting phase of branching and stopping the simulation */
 int checkphase(vector<pop> &poplist, char *PHASE, double pair[], double phasetime[], double sampletime, par_list * pars)
 {	char phase = *PHASE;
 	int done = 0;
@@ -58,7 +59,7 @@ int checkphase(vector<pop> &poplist, char *PHASE, double pair[], double phasetim
 
 
 
-void initialize(vector<pop> &poplist, vector<CRow> &cmatrix, par_list * pars){
+void initialize_population(vector<pop> &poplist, vector<CRow> &cmatrix, par_list * pars){
 
 			double init_parent = M_PI; //initial id, arbitrary
 			double N1o = round(K(pars->xo, pars));
@@ -69,7 +70,8 @@ void initialize(vector<pop> &poplist, vector<CRow> &cmatrix, par_list * pars){
 			grow_C(poplist, cmatrix, pars);
 }
 
-void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double phase1time[], double phase2time[], double phase3time[], int *trial)
+/** Simulate a single replicate of evolutionary branching process.  Can record time to complete each phase of the process */
+void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double phasetime[])
 {
 	double mc = 1 / (2 * *sigma_c2);
 	double mk = 1 / (2 * *sigma_k2);
@@ -88,16 +90,14 @@ void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *s
 	vector<pop> poplist;
 	vector<CRow> cmatrix;
 
-
-
 	
 	/* Create an initial population */
-	initialize(poplist, cmatrix, &pars);
+	initialize_population(poplist, cmatrix, &pars);
 	
 	/* Reporting and tracking phase of branching */
 	char phase = '1';
 	double time = 0, sampletime = 0, Dt = MAXTIME/SAMPLES, sum;
-	double pair[2], phasetime[3] = {0,0,0};
+	double pair[2]; 
 
 	/* Simulation */
 	while( time < MAXTIME ){
@@ -111,10 +111,6 @@ void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *s
 		event_and_rates(rng, poplist, sum, cmatrix, &pars);
 	}
 
-	phase1time[*trial] = phasetime[0];
-	phase2time[*trial] = phasetime[1];
-	phase3time[*trial] = phasetime[2];
-	printf("%g %g %g\n", phasetime[0], phasetime[1], phasetime[2]);
 	poplist.clear();
 	cmatrix.clear();
 
@@ -130,12 +126,17 @@ int main(void)
 	double ko = 1000;
 	double xo = 0.5;
 
-	double phase1time[SAMPLES], phase2time[SAMPLES], phase3time[SAMPLES];
+	double phasetime[3];
+	double phase1time[MAXTRIALS], phase2time[MAXTRIALS], phase3time[MAXTRIALS];
 
 	int trial;
 	#pragma omp parallel for 
 	for(trial = 0; trial < MAXTRIALS; trial++){
-		branch_simulation(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, phase1time, phase2time, phase3time, &trial);
+		branch_simulation(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, phasetime);
+		phase1time[trial] = phasetime[1];
+		phase2time[trial] = phasetime[2];
+		phase3time[trial] = phasetime[3];
+		printf("%g %g %g\n", phasetime[1], phasetime[2], phasetime[3]);
 	}
 	fprintf(stderr, "\n Phase 1 mean: %g, sd: %g \n", gsl_stats_mean(phase1time, 1, MAXTRIALS), sqrt( gsl_stats_variance(phase1time, 1, MAXTRIALS) ));
 	fprintf(stderr, "Phase 2 mean: %g, sd: %g \n", gsl_stats_mean(phase2time, 1, MAXTRIALS), sqrt(gsl_stats_variance(phase2time, 1, MAXTRIALS) ));

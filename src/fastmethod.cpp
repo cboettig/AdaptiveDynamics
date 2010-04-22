@@ -30,7 +30,6 @@ void print_C(vector<CRow> &cmatrix)
 void grow_C(vector<pop> &poplist, vector<CRow> &cmatrix, par_list * pars)
 {
 	vector<pop>::iterator p;
-// vector<CRow>::iterator v = cmatrix.begin();
 	int v = 0;
 	double x = ( --poplist.end() )->trait;
 	CRow row;
