@@ -2,18 +2,10 @@
 #define VERBOSE 0
 #define PNG_ON 0
 
-//pars just used to initialize
-#define SIGMA_MU (double) 0.05
-#define MU (double) 1.e-3
-#define Xo (double) -.5
-
-// Parameters
-#define Ko (int) 1000
-
 #define SAMPLES (int) 1e4
 #define MAXTIME 1e4
 #define MAXTRIALS  2
-#define THRESHOLD (int) Ko/10
+#define THRESHOLD (int) 100
 #define X2 (double) -.5
 #define N2o (double) 0.0
 #define LINE (double) .6
@@ -36,7 +28,6 @@
 #include <list>
 #include <vector>
 
-#include <pngwriter.h>
 
 using namespace std;
 
@@ -47,6 +38,7 @@ typedef struct {
 	double mk;
 	double ko;
 	double ik;
+	double xo;
 } par_list;
 
 typedef struct {
@@ -97,9 +89,6 @@ double flagget(vector<pop> &poplist, double flag);
 void update_rates(vector<pop> &poplist);
 void event(gsl_rng * rng, vector<pop> &poplist, double sum);
 
-
-
-void plotpng(vector<pop> &poplist, int time, pngwriter &png);
 
 int traits_above_thresh(vector<pop> &poplist);
 

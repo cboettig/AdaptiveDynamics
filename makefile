@@ -2,10 +2,6 @@
 #	branchingtime makefile			#
 #	Makefile for GNU C++ Compiler	#
 #-----------------------------------#
-include gnu-compilers.h
-
-NTHREADS = 2
-
 CC = g++
 EXE = branch.exe
 CFLAGS = -Wall -lgsl -lgslcblas -lm
@@ -13,15 +9,11 @@ FILES = branch_vec.cpp fastmethod.cpp generalmethods.cpp
 PNG = `freetype-config --cflags` -I/usr/local/include  -L/usr/local/lib -lpng -lpngwriter -lz -lfreetype
 
 build: $(FILES)
-	$(CC) $(CFLAGS) -o $(EXE) $(FILES) $(PNG)
+	$(CC) $(CFLAGS) -o $(EXE) $(FILES) 
 
 
 parallel: $(FILES)
-	$(CC) $(CFLAGS) -o $(EXE) $(FILES) $(C_OMP) $(PNG)
-
-run: 
-	@(OMP_NUM_THREADS=$(NTHREADS); export OMP_NUM_THREADS ;\
-	nice ./$(EXE) )
+	$(CC) $(CFLAGS) -o $(EXE) $(FILES) -fopenmp 
 
 clean:
 	rm -f *.o

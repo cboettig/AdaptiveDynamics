@@ -56,73 +56,92 @@ int checkphase(vector<pop> &poplist, char *PHASE, double pair[], double phasetim
 	return done;
 }
 
-void branch_simulation(double sigma_mu, double mu, double mc, double mk, double ko, double xo)
+
+
+void initialize(vector<pop> &poplist, vector<CRow> &cmatrix, par_list * pars){
+
+			double init_parent = M_PI; //initial id, arbitrary
+			double N1o = round(K(pars->xo, pars));
+			double comp = C(pars->xo,X2, pars)*N2o+N1o;
+			double d = R*N1o*comp*Kinv(pars->xo, pars);
+			pop pop_i = {(int) N1o,	pars->xo, R*N1o, d, init_parent, comp};
+			poplist.push_back(pop_i);
+			grow_C(poplist, cmatrix, pars);
+}
+
+void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double phase1time[], double phase2time[], double phase3time[], int *trial)
 {
-	gsl_rng * rng = gsl_rng_alloc (gsl_rng_default); 
+	double mc = 1 / (2 * *sigma_c2);
+	double mk = 1 / (2 * *sigma_k2);
+
+	par_list pars;
+	pars.sigma_mu = *sigma_mu;
+	pars.mu = *mu;
+	pars.mc = mc;
+	pars.mk = mk;
+	pars.ko = *ko;
+	pars.ik = 1 / *ko;
+
+	gsl_rng *rng = gsl_rng_alloc (gsl_rng_default); 
 	gsl_rng_set(rng, time(NULL));
 
 	vector<pop> poplist;
 	vector<CRow> cmatrix;
 
-	par_list pars;
-	pars.sigma_mu = sigma_mu;
-	pars.mu = mu;
-	pars.mc = mc;
-	pars.mk = mk;
-	pars.ko = ko;
-	pars.ik = 1/ko;
 
-	int trial;
-	double phase1time[SAMPLES], phase2time[SAMPLES], phase3time[SAMPLES];
-	#pragma omp parallel for default(none) shared(rng, pars, phase1time, phase2time, phase3time) private(poplist, cmatrix, trial)
-	for(trial = 0; trial < MAXTRIALS; trial++){
 
-		/* Initialize constants */
-		double time = 0, sampletime = 0, Dt = MAXTIME/SAMPLES, sum;
-		double init_parent = M_PI; //initial id, arbitrary
+	
+	/* Create an initial population */
+	initialize(poplist, cmatrix, &pars);
+	
+	/* Reporting and tracking phase of branching */
+	char phase = '1';
+	double time = 0, sampletime = 0, Dt = MAXTIME/SAMPLES, sum;
+	double pair[2], phasetime[3] = {0,0,0};
 
-		/* Create an initial population */
-		double N1o = round(K(Xo, &pars));
-		double comp = C(Xo,X2, &pars)*N2o+N1o;
-		double d = R*N1o*comp*Kinv(Xo, &pars);
-		pop pop_i = {(int) N1o,	Xo, R*N1o, d, init_parent, comp};
-		poplist.push_back(pop_i);
-		grow_C(poplist, cmatrix, &pars);
-
-		/* Reporting and tracking phase of branching */
-		char phase = '1';
-		double pair[2], phasetime[3] = {0,0,0};
-
-		/* Simulation */
-		while( time < MAXTIME ){
-			sum = sumrates(poplist);
-			time += gsl_ran_exponential(rng, 1/sum);
-			if(time > sampletime){
-	//			printlist(poplist,sampletime);
-				if(checkphase(poplist, &phase, pair, phasetime, sampletime, &pars) ) break;
-				sampletime += Dt;
-			}
-			event_and_rates(rng, poplist, sum, cmatrix, &pars);
+	/* Simulation */
+	while( time < MAXTIME ){
+		sum = sumrates(poplist);
+		time += gsl_ran_exponential(rng, 1/sum);
+		if(time > sampletime){
+//			printlist(poplist,sampletime);
+			if(checkphase(poplist, &phase, pair, phasetime, sampletime, &pars) ) break;
+			sampletime += Dt;
 		}
-
-		phase1time[trial] = phasetime[0];
-		phase2time[trial] = phasetime[1];
-		phase3time[trial] = phasetime[2];
-		printf("%g %g %g\n", phasetime[0], phasetime[1], phasetime[2]);
-		poplist.clear();
-		cmatrix.clear();
+		event_and_rates(rng, poplist, sum, cmatrix, &pars);
 	}
-	fprintf(stderr, "Phase 1 mean: %g, sd: %g \n", gsl_stats_mean(phase1time, 1, MAXTRIALS), sqrt( gsl_stats_variance(phase1time, 1, MAXTRIALS) ));
-	fprintf(stderr, "Phase 2 mean: %g, sd: %g \n", gsl_stats_mean(phase2time, 1, MAXTRIALS), sqrt(gsl_stats_variance(phase2time, 1, MAXTRIALS) ));
-	fprintf(stderr, "Phase 3 mean: %g, sd: %g \n", gsl_stats_mean(phase3time, 1, MAXTRIALS), sqrt(gsl_stats_variance(phase3time, 1, MAXTRIALS) ));
+
+	phase1time[*trial] = phasetime[0];
+	phase2time[*trial] = phasetime[1];
+	phase3time[*trial] = phasetime[2];
+	printf("%g %g %g\n", phasetime[0], phasetime[1], phasetime[2]);
+	poplist.clear();
+	cmatrix.clear();
+
 	gsl_rng_free(rng);
 }
 
 int main(void)
 {
+	double sigma_mu = 0.05;
+	double mu = 1.e-3;
 	double sigma_k2 = 1;
 	double sigma_c2 = .1;
-	branch_simulation(SIGMA_MU, MU, 1/(2*sigma_c2), 1/(2*sigma_k2), Ko, Xo);
+	double ko = 1000;
+	double xo = 0.5;
+
+	double phase1time[SAMPLES], phase2time[SAMPLES], phase3time[SAMPLES];
+
+	int trial;
+	#pragma omp parallel for 
+	for(trial = 0; trial < MAXTRIALS; trial++){
+		branch_simulation(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, phase1time, phase2time, phase3time, &trial);
+	}
+	fprintf(stderr, "\n Phase 1 mean: %g, sd: %g \n", gsl_stats_mean(phase1time, 1, MAXTRIALS), sqrt( gsl_stats_variance(phase1time, 1, MAXTRIALS) ));
+	fprintf(stderr, "Phase 2 mean: %g, sd: %g \n", gsl_stats_mean(phase2time, 1, MAXTRIALS), sqrt(gsl_stats_variance(phase2time, 1, MAXTRIALS) ));
+	fprintf(stderr, "Phase 3 mean: %g, sd: %g \n", gsl_stats_mean(phase3time, 1, MAXTRIALS), sqrt(gsl_stats_variance(phase3time, 1, MAXTRIALS) ));
+
+
 	return 0;
 }
 
