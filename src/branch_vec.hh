@@ -4,7 +4,7 @@
 
 #define SAMPLES (int) 1e4
 #define MAXTIME 1e4
-#define MAXTRIALS  2
+#define MAXTRIALS  20
 #define THRESHOLD (int) 100
 #define X2 (double) -.5
 #define N2o (double) 0.0
