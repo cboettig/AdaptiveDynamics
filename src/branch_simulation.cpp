@@ -71,44 +71,49 @@ void initialize_population(vector<pop> &poplist, vector<CRow> &cmatrix, par_list
 }
 
 /** Simulate a single replicate of evolutionary branching process.  Can record time to complete each phase of the process */
-void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double phasetime[], gsl_rng * rng)
+void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double * phasetime)
 {
 	double mc = 1 / (2 * *sigma_c2);
 	double mk = 1 / (2 * *sigma_k2);
+	par_list p = {*sigma_mu, *mu, mc, mk, *ko, 1 / *ko};
+	par_list * pars = &p;
 
-	par_list pars = {*sigma_mu, *mu, mc, mk, *ko, 1 / *ko};
-
-//	gsl_rng *rng = gsl_rng_alloc (gsl_rng_default); 
-//	gsl_rng_set(rng, time(NULL));
+	gsl_rng *rng = gsl_rng_alloc (gsl_rng_default); 
+	gsl_rng_set(rng, time(NULL));
 
 	vector<pop> poplist;
 	vector<CRow> cmatrix;
 
 	
-	/* Create an initial population */
-	initialize_population(poplist, cmatrix, &pars);
 	
-	/* Reporting and tracking phase of branching */
-	char phase = '1';
-	double time = 0, sampletime = 0, Dt = MAXTIME/SAMPLES, sum;
-	double pair[2]; 
+	/* Simulation */
+	#pragma omp for private(poplist, cmatrix)
+	for(int trial = 0; trial<1; trial++){
 
-	/* Simulation */ 
-	while( time < MAXTIME ){
-		sum = sumrates(poplist);
-		time += gsl_ran_exponential(rng, 1/sum);
-		if(time > sampletime){
-//			printlist(poplist,sampletime);
-			if(checkphase(poplist, &phase, pair, phasetime, sampletime, &pars) ) break;
-			sampletime += Dt;
+		/* Create an initial population */
+		initialize_population(poplist, cmatrix, pars);
+		/* Reporting and tracking phase of branching */
+		char phase = '1';
+		double time = 0, sampletime = 0, Dt = MAXTIME/SAMPLES, sum;
+		double pair[2]; 
+
+		while( time < MAXTIME ){
+			sum = sumrates(poplist);
+			time += gsl_ran_exponential(rng, 1/sum);
+			if(time > sampletime){
+	//			printlist(poplist,sampletime);
+				if(checkphase(poplist, &phase, pair, phasetime, sampletime, pars) ) break;
+				sampletime += Dt;
+			}
+			event_and_rates(rng, poplist, sum, cmatrix, pars);
 		}
-		event_and_rates(rng, poplist, sum, cmatrix, &pars);
+		poplist.clear();
+		cmatrix.clear();
+
+
+		printf("%g %g %g\n", phasetime[0], phasetime[1], phasetime[2]);
 	}
-
-	poplist.clear();
-	cmatrix.clear();
-
-//	gsl_rng_free(rng);
+	gsl_rng_free(rng);
 }
 
 int main(void)
@@ -120,15 +125,23 @@ int main(void)
 	double ko = 1000;
 	double xo = 0.5;
 
-	double phasetime[3] = {0,0,0};
-	double phase1time[MAXTRIALS], phase2time[MAXTRIALS], phase3time[MAXTRIALS];
-	gsl_rng *rng = gsl_rng_alloc (gsl_rng_default); 
-	gsl_rng_set(rng, time(NULL));
+	double * phasetime;
+	#pragma omp parallel private(phasetime) default(none) shared(sigma_mu, mu, sigma_k2, sigma_c2, ko, xo)
+	{
+		phasetime = (double *) calloc(3,sizeof(double));
+		branch_simulation(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, phasetime);
+		free(phasetime);
+	}
 
+
+/*
+	double phase1time[MAXTRIALS], phase2time[MAXTRIALS], phase3time[MAXTRIALS];
 	int trial;
+
+ 
 	#pragma omp parallel for 
 	for(trial = 0; trial < MAXTRIALS; trial++){
-		branch_simulation(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, phasetime, rng);
+		branch_simulation(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, phasetime);
 		phase1time[trial] = phasetime[0];
 		phase2time[trial] = phasetime[1];
 		phase3time[trial] = phasetime[2];
@@ -138,7 +151,7 @@ int main(void)
 	fprintf(stderr, "Phase 2 mean: %g, sd: %g \n", gsl_stats_mean(phase2time, 1, MAXTRIALS), sqrt(gsl_stats_variance(phase2time, 1, MAXTRIALS) ));
 	fprintf(stderr, "Phase 3 mean: %g, sd: %g \n", gsl_stats_mean(phase3time, 1, MAXTRIALS), sqrt(gsl_stats_variance(phase3time, 1, MAXTRIALS) ));
 
-
+*/
 	return 0;
 }
 

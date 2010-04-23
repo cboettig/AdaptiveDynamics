@@ -5,7 +5,7 @@
 CC = g++
 EXE = branch.exe
 CFLAGS = -Wall -lgsl -lgslcblas -lm
-FILES = branch_vec.cpp fastmethod.cpp generalmethods.cpp
+FILES = branch_simulation.cpp fastmethod.cpp generalmethods.cpp
 PNG = `freetype-config --cflags` -I/usr/local/include  -L/usr/local/lib -lpng -lpngwriter -lz -lfreetype
 
 build: $(FILES)
@@ -16,9 +16,9 @@ parallel: $(FILES)
 	$(CC) $(CFLAGS) -o $(EXE) $(FILES) -fopenmp 
 
 clean:
-	rm -f *.o
+	rm -f *.o *.so *.exe
 
 # run make profile, then execute program, then run gprof -a branch_vec gmon.out
 profile:  $(FILES)
-	$(CC) $(CFLAGS) -pg -g -o $(EXE) $(FILES)
+	$(CC) $(CFLAGS) -pg -g -o $(EXE) $(FILES) -fopenmp
 
