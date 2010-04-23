@@ -71,7 +71,7 @@ void initialize_population(vector<pop> &poplist, vector<CRow> &cmatrix, par_list
 }
 
 /** Simulate a single replicate of evolutionary branching process.  Can record time to complete each phase of the process */
-void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double * phasetime)
+void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double * phasetime, int * seed)
 {
 	double mc = 1 / (2 * *sigma_c2);
 	double mk = 1 / (2 * *sigma_k2);
@@ -79,7 +79,7 @@ void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *s
 	par_list * pars = &p;
 
 	gsl_rng *rng = gsl_rng_alloc (gsl_rng_default); 
-	gsl_rng_set(rng, time(NULL));
+	gsl_rng_set(rng, *seed);
 
 	vector<pop> poplist;
 	vector<CRow> cmatrix;
@@ -125,11 +125,13 @@ int main(void)
 	double ko = 1000;
 	double xo = 0.5;
 
+	int seed = time(NULL);
+
 	double * phasetime;
 	#pragma omp parallel private(phasetime) default(none) shared(sigma_mu, mu, sigma_k2, sigma_c2, ko, xo)
 	{
 		phasetime = (double *) calloc(3,sizeof(double));
-		branch_simulation(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, phasetime);
+		branch_simulation(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, phasetime, &seed);
 		free(phasetime);
 	}
 
