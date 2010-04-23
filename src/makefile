@@ -15,6 +15,9 @@ build: $(FILES)
 parallel: $(FILES)
 	$(CC) $(CFLAGS) -o $(EXE) $(FILES) -fopenmp 
 
+one: $(FILES)
+	g++-4.4.1 $(CFLAGS) -o $(EXE) $(FILES) -fopenmp 
+
 clean:
 	rm -f *.o *.so *.exe
 

@@ -18,8 +18,19 @@ branch_simulation <- function(sigma_mu = 0.05, mu = 1e-3, sigma_c2 = .1, sigma_k
 	out[[7]]
 }
 
-library(snowfall)
-sfInit(parallel=TRUE, cpus=2)
-sfExportAll()
-out <- sfSapply(1:10, function(i){ branch_simulation() })
-sfStop()
+branching_time <- function(reps = 10, sigma_mu = 0.05, mu = 1e-3, sigma_c2 = .1, sigma_k2 = 1, ko = 1000, xo = 0.5, cpus = 2){
+	require(snowfall)
+	sfInit(parallel=TRUE, cpus=cpus)
+	sfLibrary(BranchingTime)
+	loc <- system.file(package="BranchingTime")
+	lib <- paste(loc, "/libs/BranchingTime.so", sep="")
+	sfExport("lib")
+	sfClusterEval(dyn.load(lib) )
+	out <- sfSapply(1:reps, function(i){ branch_simulation() })
+	sfStop()
+	out
+}
+
+
+
+

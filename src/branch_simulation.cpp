@@ -88,7 +88,7 @@ void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *s
 	
 	/* Simulation */
 	#pragma omp for private(poplist, cmatrix)
-	for(int trial = 0; trial<1; trial++){
+	for(int trial = 0; trial<MAXTRIALS; trial++){
 
 		/* Create an initial population */
 		initialize_population(poplist, cmatrix, pars);
@@ -133,25 +133,6 @@ int main(void)
 		free(phasetime);
 	}
 
-
-/*
-	double phase1time[MAXTRIALS], phase2time[MAXTRIALS], phase3time[MAXTRIALS];
-	int trial;
-
- 
-	#pragma omp parallel for 
-	for(trial = 0; trial < MAXTRIALS; trial++){
-		branch_simulation(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, phasetime);
-		phase1time[trial] = phasetime[0];
-		phase2time[trial] = phasetime[1];
-		phase3time[trial] = phasetime[2];
-		printf("%g %g %g\n", phasetime[0], phasetime[1], phasetime[2]);
-	}
-	fprintf(stderr, "\n Phase 1 mean: %g, sd: %g \n", gsl_stats_mean(phase1time, 1, MAXTRIALS), sqrt( gsl_stats_variance(phase1time, 1, MAXTRIALS) ));
-	fprintf(stderr, "Phase 2 mean: %g, sd: %g \n", gsl_stats_mean(phase2time, 1, MAXTRIALS), sqrt(gsl_stats_variance(phase2time, 1, MAXTRIALS) ));
-	fprintf(stderr, "Phase 3 mean: %g, sd: %g \n", gsl_stats_mean(phase3time, 1, MAXTRIALS), sqrt(gsl_stats_variance(phase3time, 1, MAXTRIALS) ));
-
-*/
 	return 0;
 }
 
