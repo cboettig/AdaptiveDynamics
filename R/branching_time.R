@@ -32,8 +32,8 @@ branching_time <- function(reps = 10, sigma_mu = 0.05, mu = 1e-3, sigma_c2 = .1,
 	loc <- system.file(package="BranchingTime")
 	lib <- paste(loc, "/libs/BranchingTime.so", sep="")
 	sfExport("lib")
-	seeds <- 1e9*runif(reps)
 	sfClusterEval(dyn.load(lib) )
+	seeds <- 1e9*runif(reps)
 	out <- sfSapply(1:reps, function(i){ branch_simulation(seed=seeds[i]) })
 	sfStop()
 	out
