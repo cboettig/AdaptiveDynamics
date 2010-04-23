@@ -2,7 +2,6 @@
 # Author: Carl Boettiger <cboettig@gmail.com>
 # License: GPL v3.0
 
-dyn.load("../src/branch_simulation.so")
 
 branch_simulation <- function(sigma_mu = 0.05, mu = 1e-3, sigma_c2 = .1, sigma_k2 = 1, ko = 1000, xo = 0.5){
 	phasetime <- double(3);
@@ -19,4 +18,8 @@ branch_simulation <- function(sigma_mu = 0.05, mu = 1e-3, sigma_c2 = .1, sigma_k
 	out[[7]]
 }
 
-out <- sapply(1:10, function(i){ branch_simulation() })
+library(snowfall)
+sfInit(parallel=TRUE, cpus=2)
+sfExportAll()
+out <- sfSapply(1:10, function(i){ branch_simulation() })
+sfStop()
