@@ -5,8 +5,8 @@
 #define SAMPLES (int) 1e4
 #define MAXTIME 1e4
 #define MAXTRIALS  1
-#define THRESHOLD (int) 100
-#define X2 (double) -.5
+#define THRESHOLD (int) 50
+#define X2 (double) -.02
 #define N2o (double) 0.0
 #define LINE (double) .6
 #define EPSILON (double) 1e-9

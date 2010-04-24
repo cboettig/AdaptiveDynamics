@@ -68,14 +68,21 @@ void initialize_population(vector<pop> &poplist, vector<CRow> &cmatrix, par_list
 			pop pop_i = {(int) N1o,	pars->xo, R*N1o, d, init_parent, comp};
 			poplist.push_back(pop_i);
 			grow_C(poplist, cmatrix, pars);
-}
+			if(N2o != 0){ /* Create the second clonal type if desired */
+				comp = C(pars->xo,X2,pars)*N1o+N2o;
+				d = R*N2o*comp*Kinv(X2,pars);
+				pop pop_j = {(int) N2o, X2, R*N2o,  d, init_parent, comp};
+				poplist.push_back(pop_j);
+				grow_C(poplist, cmatrix, pars);
+			}
+		}
 
 /** Simulate a single replicate of evolutionary branching process.  Can record time to complete each phase of the process */
 void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double * phasetime, int * seed)
 {
 	double mc = 1 / (2 * *sigma_c2);
 	double mk = 1 / (2 * *sigma_k2);
-	par_list p = {*sigma_mu, *mu, mc, mk, *ko, 1 / *ko};
+	par_list p = {*sigma_mu, *mu, mc, mk, *ko, 1 / *ko, *xo};
 	par_list * pars = &p;
 
 	gsl_rng *rng = gsl_rng_alloc (gsl_rng_default); 
@@ -101,7 +108,7 @@ void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *s
 			sum = sumrates(poplist);
 			time += gsl_ran_exponential(rng, 1/sum);
 			if(time > sampletime){
-	//			printlist(poplist,sampletime);
+				printlist(poplist,sampletime);
 				if(checkphase(poplist, &phase, pair, phasetime, sampletime, pars) ) break;
 				sampletime += Dt;
 			}
@@ -118,12 +125,12 @@ void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *s
 
 int main(void)
 {
-	double sigma_mu = 0.05;
-	double mu = 1.e-3;
+	double sigma_mu = 0.03;
+	double mu = 1.e-4;
 	double sigma_k2 = 1;
-	double sigma_c2 = .1;
+	double sigma_c2 = gsl_pow_2(.3);
 	double ko = 1000;
-	double xo = 0.5;
+	double xo = .02;
 
 	int seed = time(NULL);
 
