@@ -40,5 +40,20 @@ branching_time <- function(reps = 10, sigma_mu = 0.05, mu = 1e-3, sigma_c2 = .1,
 }
 
 
-
+analytic_distribution <- function(maximum = 1e5, minimum = 0, sigma_mu = 0.05, mu = 1e-3, sigma_c2 = .1, sigma_k2 = 1, ko = 1000, xo = 0.5, n_pts = 100){
+	times <- seq(minimum, maximum, length= n_pts);
+	out <- .C("_Z9analyticsPdS_S_S_S_S_S_S_Pi",
+		as.double(sigma_mu), 
+		as.double(mu), 
+		as.double(sigma_c2), 
+		as.double(sigma_k2), 
+		as.double(ko), 
+		as.double(xo),
+		as.double(times),
+		double(n_pts),
+		as.integer(n_pts)
+	)
+	list(y = out[[8]], x = times);
+}
+		
 

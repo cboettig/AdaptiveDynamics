@@ -23,6 +23,7 @@
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_statistics_double.h>
 #include <gsl/gsl_statistics.h>
+#include "integrate.h"
 
 #include <iostream>
 #include <list>
@@ -39,6 +40,7 @@ typedef struct {
 	double ko;
 	double ik;
 	double xo;
+	double y; // dummy for integration
 } par_list;
 
 typedef struct {
@@ -97,4 +99,11 @@ double * gettraits(vector<pop> &poplist);
 
 int invade_pair(vector<pop> &poplist, int threshold, double * pair);
 int branches(vector<pop> &poplist, int threshold, double * pair, par_list * pars);
+
+
+
+
+double Pintegrand(double t, void * params);
+double waiting_time_1(double T, par_list * pars);
+double mean_waiting_time_1(par_list * pars);
 

@@ -5,7 +5,7 @@
 CC = g++
 EXE = branch.exe
 CFLAGS = -Wall -lgsl -lgslcblas -lm
-FILES = branch_simulation.cpp fastmethod.cpp generalmethods.cpp ecoevo_model.cpp
+FILES = branch_simulation.cpp fastmethod.cpp generalmethods.cpp ecoevo_model.cpp analytics.cpp
 PNG = `freetype-config --cflags` -I/usr/local/include  -L/usr/local/lib -lpng -lpngwriter -lz -lfreetype
 
 build: $(FILES)

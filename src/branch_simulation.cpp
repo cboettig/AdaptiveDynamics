@@ -82,7 +82,7 @@ void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *s
 {
 	double mc = 1 / (2 * *sigma_c2);
 	double mk = 1 / (2 * *sigma_k2);
-	par_list p = {*sigma_mu, *mu, mc, mk, *ko, 1 / *ko, *xo};
+	par_list p = {*sigma_mu, *mu, mc, mk, *ko, 1 / *ko, *xo, NULL};
 	par_list * pars = &p;
 
 	gsl_rng *rng = gsl_rng_alloc (gsl_rng_default); 
@@ -123,6 +123,25 @@ void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *s
 	gsl_rng_free(rng);
 }
 
+
+
+void analytics(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double *times, double *waiting_time_distribution, int * samples)
+{
+	double mc = 1 / (2 * *sigma_c2);
+	double mk = 1 / (2 * *sigma_k2);
+	par_list p = {*sigma_mu, *mu, mc, mk, *ko, 1 / *ko, *xo, NULL};
+	par_list * pars = &p;
+
+	int i;
+	for(i = 0; i < *samples; i++)
+	{
+		waiting_time_distribution[i] = waiting_time_1(times[i], pars);
+//		printf("%g\n", waiting_time_distribution[i] );
+	}
+//	printf("\n\n Mean: %g\n", mean_waiting_time_1(pars) );
+
+}
+
 int main(void)
 {
 	double sigma_mu = 0.03;
@@ -138,9 +157,18 @@ int main(void)
 	#pragma omp parallel private(phasetime) default(none) shared(sigma_mu, mu, sigma_k2, sigma_c2, ko, xo)
 	{
 		phasetime = (double *) calloc(3,sizeof(double));
-		branch_simulation(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, phasetime, &seed);
+//		branch_simulation(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, phasetime, &seed);
 		free(phasetime);
 	}
+
+
+	int i;
+	int npts = 500;
+	double density[500];
+	double times[500];
+	for(i=0;i<npts;i++) times[i] = i;
+
+	analytics(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, times, density, &npts);
 
 	return 0;
 }

@@ -1,13 +1,4 @@
-#include <stdio.h>
-#include <math.h>
-#include <gsl/gsl_integration.h>
-#include <gsl/gsl_math.h>
-#include <gsl/gsl_errno.h>
-
-#define abserr 1e-2
-#define relerr 1e-2
-#define mem 10000
-typedef double (* function) (double x, void * params); 
+#include "integrate.h"
 
 double integrate(function f, void * params, double lower_bound, double upper_bound)
 {
@@ -28,11 +19,3 @@ double integrate(function f, void * params, double lower_bound, double upper_bou
 }
 
 
-/** Mutational Kernel */
-double M(double y, double x, double sigma_mu)
-{ 
-	exp( -gsl_pow_2( (x-y)/(2*sigma_mu)))/(sqrt(2*M_PI)*sigma_mu);
-}
-
-/** Invasion fitness of y in monomorphic population x*/
-double S(double y, double x, par
