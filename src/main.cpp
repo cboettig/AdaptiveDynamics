@@ -1,3 +1,4 @@
+#include "branch_vec.hh"
 
 int main(void)
 {
