@@ -1,11 +1,11 @@
 // Flags / Options
-#define VERBOSE 1
+#define VERBOSE 0
 #define PNG_ON 0
 
 #define SAMPLES (int) 1e4
 #define MAXTIME 1e5
-#define MAXTRIALS  1
-#define THRESHOLD (int) 100
+#define MAXTRIALS  30
+#define THRESHOLD (int) 10
 #define X2 (double) -.02
 #define N2o (double) 0
 #define LINE (double) .6

@@ -136,47 +136,9 @@ void analytics(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2,
 	for(i = 0; i < *samples; i++)
 	{
 		waiting_time_distribution[i] = waiting_time_1(times[i], pars);
-//		printf("%g\n", waiting_time_distribution[i] );
+		printf("%g\n", waiting_time_distribution[i] );
 	}
-//	printf("\n\n Mean: %g\n", mean_waiting_time_1(pars) );
+	printf("\n\n Mean: %g\n", mean_waiting_time_1(pars) );
 
-}
-
-int main(void)
-{
-	double sigma_mu = 0.05;
-	double mu = 1.e-3;
-	double sigma_c2 = .1; //gsl_pow_2(1.2);
-	double sigma_k2 = 1;
-	double ko = 1000;
-	double xo = .5;
-	int seed = time(NULL);
-	double * phasetime;
-
-	const int trials = 100;
-	double phase1[100];
-	int i;
-	gsl_rng *rng = gsl_rng_alloc (gsl_rng_default); 
-	
-	#pragma omp parallel private(phasetime) default(none) shared(sigma_mu, mu, sigma_k2, sigma_c2, ko, xo) 
-	#pragma omp for shared(rng, phase1) private(seed)
-	for(i=0; i<trials; i++)
-	{
-		seed = gsl_rng_get(rng);
-		phasetime = (double *) calloc(3,sizeof(double));
-		branch_simulation(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, phasetime, &seed);
-		phase1[i] = phasetime[0];
-		free(phasetime);
-	}
-
-
-	int npts = 500;
-	double density[500];
-	double times[500];
-	for(i=0;i<npts;i++) times[i] = i;
-
-	analytics(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, times, density, &npts);
-
-	return 0;
 }
 

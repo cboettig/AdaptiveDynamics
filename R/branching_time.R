@@ -3,7 +3,7 @@
 # License: GPL v3.0
 
 
-branch_simulation <- function(sigma_mu = 0.05, mu = 1e-3, sigma_c2 = .1, sigma_k2 = 1, ko = 1000, xo = 0.5, seed = NULL){
+branch_simulation <- function(sigma_mu = 0.05, mu = 1e-3, sigma_c2 = .1, sigma_k2 = 1, ko = 500, xo = 0.1, seed = NULL){
 	phasetime <- double(3);
 	if(is.null(seed)) { 
 		seed = runif(1)
@@ -21,7 +21,7 @@ branch_simulation <- function(sigma_mu = 0.05, mu = 1e-3, sigma_c2 = .1, sigma_k
 	out[[7]]
 }
 
-branching_time <- function(reps = 10, sigma_mu = 0.05, mu = 1e-3, sigma_c2 = .1, sigma_k2 = 1, ko = 1000, xo = 0.5, cpus = 2){
+branching_time <- function(reps = 10, sigma_mu = 0.05, mu = 1e-3, sigma_c2 = .1, sigma_k2 = 1, ko = 500, xo = 0.1, cpus = 2){
 	require(snowfall)
 	if (cpus > 1){ 
 		sfInit(parallel=TRUE, cpus=cpus) 
@@ -29,18 +29,19 @@ branching_time <- function(reps = 10, sigma_mu = 0.05, mu = 1e-3, sigma_c2 = .1,
 		sfInit() 
 	}
 	sfLibrary(BranchingTime)
-	loc <- system.file(package="BranchingTime")
-	lib <- paste(loc, "/libs/BranchingTime.so", sep="")
-	sfExport("lib")
-	sfClusterEval(dyn.load(lib) )
+## sfLibrary taxes care of this since the package NAMESPACE calls useDynLib
+#	loc <- system.file(package="BranchingTime")
+#	lib <- paste(loc, "/libs/BranchingTime.so", sep="")
+#	sfExport("lib")
+#	sfClusterEval(dyn.load(lib) )
 	seeds <- 1e9*runif(reps)
-	out <- sfSapply(1:reps, function(i){ branch_simulation(seed=seeds[i]) })
+	out <- sfSapply(1:reps, function(i){ branch_simulation(sigma_mu, mu, sigma_c2, sigma_k2, ko, xo, seed=seeds[i]) })
 	sfStop()
 	out
 }
 
 
-analytic_distribution <- function(maximum = 1e5, minimum = 0, sigma_mu = 0.05, mu = 1e-3, sigma_c2 = .1, sigma_k2 = 1, ko = 1000, xo = 0.5, n_pts = 100){
+analytic_distribution <- function(maximum = 1e4, minimum = 0, sigma_mu = 0.05, mu = 1e-3, sigma_c2 = .1, sigma_k2 = 1, ko = 500, xo = 0.1, n_pts = 100){
 	times <- seq(minimum, maximum, length= n_pts);
 	out <- .C("_Z9analyticsPdS_S_S_S_S_S_S_Pi",
 		as.double(sigma_mu), 
