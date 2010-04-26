@@ -64,13 +64,13 @@ void initialize_population(vector<pop> &poplist, vector<CRow> &cmatrix, par_list
 			double init_parent = M_PI; //initial id, arbitrary
 			double N1o = round(K(pars->xo, pars));
 			double comp = C(pars->xo,X2, pars)*N2o+N1o;
-			double d = R*N1o*comp*Kinv(pars->xo, pars);
+			double d = R*N1o*comp/K(pars->xo, pars);
 			pop pop_i = {(int) N1o,	pars->xo, R*N1o, d, init_parent, comp};
 			poplist.push_back(pop_i);
 			grow_C(poplist, cmatrix, pars);
 			if(N2o != 0){ /* Create the second clonal type if desired */
 				comp = C(pars->xo,X2,pars)*N1o+N2o;
-				d = R*N2o*comp*Kinv(X2,pars);
+				d = R*N2o*comp/K(X2,pars);
 				pop pop_j = {(int) N2o, X2, R*N2o,  d, init_parent, comp};
 				poplist.push_back(pop_j);
 				grow_C(poplist, cmatrix, pars);
@@ -108,7 +108,7 @@ void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *s
 			sum = sumrates(poplist);
 			time += gsl_ran_exponential(rng, 1/sum);
 			if(time > sampletime){
-				printlist(poplist,sampletime);
+	//			printlist(poplist,sampletime);
 				if(checkphase(poplist, &phase, pair, phasetime, sampletime, pars) ) break;
 				sampletime += Dt;
 			}
@@ -126,11 +126,11 @@ void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *s
 int main(void)
 {
 	double sigma_mu = 0.03;
-	double mu = 1.e-4;
+	double mu = 1.e-3;
+	double sigma_c2 = .2; //gsl_pow_2(1.2);
 	double sigma_k2 = 1;
-	double sigma_c2 = gsl_pow_2(.3);
-	double ko = 1000;
-	double xo = .02;
+	double ko = 500;
+	double xo = .1;
 
 	int seed = time(NULL);
 

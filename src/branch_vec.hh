@@ -1,13 +1,13 @@
 // Flags / Options
-#define VERBOSE 0
+#define VERBOSE 1
 #define PNG_ON 0
 
 #define SAMPLES (int) 1e4
-#define MAXTIME 1e4
+#define MAXTIME 1e5
 #define MAXTRIALS  1
-#define THRESHOLD (int) 50
+#define THRESHOLD (int) 100
 #define X2 (double) -.02
-#define N2o (double) 0.0
+#define N2o (double) 0
 #define LINE (double) .6
 #define EPSILON (double) 1e-9
 #define R (double) 1.0

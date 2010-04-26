@@ -88,7 +88,7 @@ void fast_update_rates(vector<pop> &poplist, vector<CRow> &cmatrix, int id, char
 		}
 		j++;
 		p->birth = R* p->popsize;
-		p->death = R* p->popsize * (p->compete) * Kinv( p->trait, pars );
+		p->death = R* p->popsize * (p->compete) / K( p->trait, pars );
 	}
 
 }
