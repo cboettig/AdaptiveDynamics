@@ -15,13 +15,13 @@ branch_simulation <- function(sigma_mu = 0.05, mu = 1e-3, sigma_c2 = .1, sigma_k
 				as.double(sigma_k2), 
 				as.double(ko), 
 				as.double(xo), 
-				double(3),
+				double(4),
 				as.integer(seed)
 			)
 	out[[7]]
 }
 
-branching_time <- function(reps = 10, sigma_mu = 0.05, mu = 1e-3, sigma_c2 = .1, sigma_k2 = 1, ko = 500, xo = 0.1, cpus = 2){
+branching_time <- function(reps = 10, sigma_mu = 0.03, mu = 1e-2, sigma_c2 = 1/6, sigma_k2 = 1, ko = 100, xo = 0.5, cpus = 2){
 	require(snowfall)
 	if (cpus > 1){ 
 		sfInit(parallel=TRUE, cpus=cpus) 
@@ -40,10 +40,10 @@ branching_time <- function(reps = 10, sigma_mu = 0.05, mu = 1e-3, sigma_c2 = .1,
 	out
 }
 
-
-analytic_distribution <- function(maximum = 1e4, minimum = 0, sigma_mu = 0.05, mu = 1e-3, sigma_c2 = .1, sigma_k2 = 1, ko = 500, xo = 0.1, n_pts = 100){
+# max and min are bound on time distribution
+analytic_distribution <- function(maximum = 1e3, minimum = 0, sigma_mu = 0.05, mu = 1e-3, sigma_c2 = .1, sigma_k2 = 1, ko = 500, xo = 0.1, n_pts = 100){
 	times <- seq(minimum, maximum, length= n_pts);
-	out <- .C("_Z9analyticsPdS_S_S_S_S_S_S_Pi",
+	out <- .C("_Z9analyticsPdS_S_S_S_S_S_S_PiS_",
 		as.double(sigma_mu), 
 		as.double(mu), 
 		as.double(sigma_c2), 
@@ -52,9 +52,10 @@ analytic_distribution <- function(maximum = 1e4, minimum = 0, sigma_mu = 0.05, m
 		as.double(xo),
 		as.double(times),
 		double(n_pts),
-		as.integer(n_pts)
+		as.integer(n_pts),
+		double(1)
 	)
-	list(y = out[[8]], x = times);
+	list(y = out[[8]], x = times, mean = out[[10]]);
 }
 		
 

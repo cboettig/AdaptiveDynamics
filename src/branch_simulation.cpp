@@ -7,7 +7,7 @@ int checkphase(vector<pop> &poplist, char *PHASE, double pair[], double phasetim
 	int done = 0;
 	switch(phase)
 	{
-		case '1' :
+		case '0' : // first time two branches are established
 			if(branches(poplist,THRESHOLD, pair, pars) ){
 				#if VERBOSE 
 				printf("phase 1 done!\n"); printlist(poplist, sampletime);
@@ -17,7 +17,17 @@ int checkphase(vector<pop> &poplist, char *PHASE, double pair[], double phasetim
 			}
 			break;
 			
-		case '2' :
+		case '1' : // last time two branches restablished
+			if(branches(poplist,THRESHOLD, pair, pars) ){
+				#if VERBOSE 
+				printf("phase 1 done!\n"); printlist(poplist, sampletime);
+				#endif
+				phasetime[1] = sampletime;						
+				phase = '2';
+			}
+			break;
+			
+		case '2' : // last time the dimorphic pair is invaded successfully
 			if(!branchcheck(poplist,0, pars)){ 
 				#if VERBOSE 
 				printf("dimorphism lost! back to phase 1 !\n"); printlist(poplist, sampletime);
@@ -27,7 +37,7 @@ int checkphase(vector<pop> &poplist, char *PHASE, double pair[], double phasetim
 				#if VERBOSE
 				printf("phase 2 done!\n"); printlist(poplist, sampletime);
 				#endif
-				phasetime[1] = sampletime;
+				phasetime[2] = sampletime;
 				phase = '3'; 
 			}
 			break;
@@ -44,7 +54,7 @@ int checkphase(vector<pop> &poplist, char *PHASE, double pair[], double phasetim
 				printf("reached finishline!\n"); printlist(poplist, sampletime);
 				// printf("1 %.1lf %.1lf %.4lf %.4lf\n", phasetime[1] - phasetime[0], sampletime - phasetime[1], pair[0], pair[1]); 
 				#endif
-				phasetime[2] = sampletime;
+				phasetime[3] = sampletime;
 				phase = '4';
 			}
 			break;
@@ -100,7 +110,7 @@ void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *s
 		/* Create an initial population */
 		initialize_population(poplist, cmatrix, pars);
 		/* Reporting and tracking phase of branching */
-		char phase = '1';
+		char phase = '0';
 		double time = 0, sampletime = 0, Dt = MAXTIME/SAMPLES, sum;
 		double pair[2]; 
 
@@ -118,14 +128,14 @@ void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *s
 		cmatrix.clear();
 
 
-		printf("%g %g %g\n", phasetime[0], phasetime[1], phasetime[2]);
+		printf("%g %g %g %g\n", phasetime[0], phasetime[1], phasetime[2], phasetime[3]);
 	}
 	gsl_rng_free(rng);
 }
 
 
 
-void analytics(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double *times, double *waiting_time_distribution, int * samples)
+void analytics(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double *times, double *waiting_time_distribution, int * samples, double * mean)
 {
 	double mc = 1 / (2 * *sigma_c2);
 	double mk = 1 / (2 * *sigma_k2);
@@ -136,9 +146,9 @@ void analytics(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2,
 	for(i = 0; i < *samples; i++)
 	{
 		waiting_time_distribution[i] = waiting_time_1(times[i], pars);
-		printf("%g\n", waiting_time_distribution[i] );
+//		printf("%g\n", waiting_time_distribution[i] );
 	}
-	printf("\n\n Mean: %g\n", mean_waiting_time_1(pars) );
+	*mean = mean_waiting_time_1(pars);
 
 }
 

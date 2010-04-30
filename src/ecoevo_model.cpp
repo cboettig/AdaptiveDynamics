@@ -21,7 +21,7 @@ double K(double x, par_list * pars)
 double M(double y, double x, par_list * pars)
 { 
 	double sigma_mu = pars->sigma_mu;
-	return exp( -gsl_pow_2( (x-y)/(2*sigma_mu)))/(sqrt(2*M_PI)*sigma_mu);
+	return exp( -0.5*gsl_pow_2( (x-y)/(sigma_mu)))/(sqrt(2*M_PI)*sigma_mu);
 }
 
 /** Invasion fitness of y in monomorphic population x*/
@@ -46,6 +46,21 @@ double P(double x, par_list * pars)
 	double psi = x*(ratio - 1) / (ratio + 1);
 	return pars->mu*K(x,pars)*(integrate(M_x_S, pars, MIN, phi) +  integrate(M_x_S, pars, psi, MAX) );
 }
+
+/* // ode solver for mean path not implemented yet!
+int func (double t, const double y[], double f[], void *params)
+{
+	par_list * pars = (par_list *) params;
+	f[0] = -pars->mu*gsl_pow_2(pars->sigma_mu)*K(y[0], pars)*y[0]*pars->mk;
+}
+double mean_path(double t, par_list * pars)
+{
+	int *jac = NULL;
+	gsl_odeiv_system sys = {func, jac, DIM, pars};
+	gsl_ode(sys, pars->xo, 1e4);
+
+}
+*/
 
 /** Approximation of the canonical equation path for constant K(x) */
 double mean_path_approx(double t, par_list * pars)

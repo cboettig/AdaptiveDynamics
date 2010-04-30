@@ -3,17 +3,14 @@
 #define PNG_ON 0
 
 #define SAMPLES (int) 1e4
-#define MAXTIME 1e5
-#define MAXTRIALS  30
-#define THRESHOLD (int) 10
+#define MAXTIME 5e5
+#define MAXTRIALS  1
+#define THRESHOLD (int) 15
 #define X2 (double) -.02
 #define N2o (double) 0
 #define LINE (double) .6
 #define EPSILON (double) 1e-9
 #define R (double) 1.0
-#define IK (double) 1.0/Ko
-#define X_PLOTSIZE SAMPLES
-#define Y_PLOTSIZE 500
 
 #include <stdio.h>
 #include <math.h>
@@ -109,7 +106,7 @@ double mean_waiting_time_1(par_list * pars);
 
 
 
-void analytics(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double *times, double *waiting_time_distribution, int * samples);
+void analytics(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double *times, double *waiting_time_distribution, int * samples, double * mean);
 
 void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double * phasetime, int * seed);
 
