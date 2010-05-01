@@ -21,7 +21,7 @@ branch_simulation <- function(sigma_mu = 0.05, mu = 1e-3, sigma_c2 = .1, sigma_k
 	out[[7]]
 }
 
-branching_time <- function(reps = 10, sigma_mu = 0.03, mu = 1e-2, sigma_c2 = 1/6, sigma_k2 = 1, ko = 100, xo = 0.5, cpus = 2){
+branching_time <- function(reps = 100, sigma_mu = 0.03, mu = 0.01, sigma_c2 = .1, sigma_k2 = 1, ko = 100, xo = 0.5, cpus = 2){
 	require(snowfall)
 	if (cpus > 1){ 
 		sfInit(parallel=TRUE, cpus=cpus) 
