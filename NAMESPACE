@@ -1,5 +1,5 @@
 useDynLib(BranchingTime)
 export( branch_simulation,
 		branching_time,
-		analytic_distribution
+		waiting_time
 )

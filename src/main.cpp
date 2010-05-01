@@ -8,14 +8,14 @@ int main(void)
 	double sigma_k2 = 1;
 	double ko = 100;
 	double xo = .5;
-
+	int threshold = 30;
 	int seed = time(NULL);
 
 	double * phasetime;
 	#pragma omp parallel private(phasetime) default(none) shared(sigma_mu, mu, sigma_k2, sigma_c2, ko, xo, seed)
 	{
 		phasetime = (double *) calloc(4,sizeof(double));
-//		branch_simulation(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, phasetime, &seed);
+		branch_simulation(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, phasetime, &seed, &threshold);
 		free(phasetime);
 	}
 
@@ -26,7 +26,7 @@ int main(void)
 	double times[50];
 	for(i=0;i<npts;i++) times[i] = 1000.*i/(double) npts;
 
-	analytics(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, times, density, &npts, &mean);
+//	analytics(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, times, density, &npts, &mean);
 	printf("\n\n Mean: %g\n", mean );
 
 	return 0;

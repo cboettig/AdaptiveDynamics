@@ -8,7 +8,7 @@ int checkphase(vector<pop> &poplist, char *PHASE, double pair[], double phasetim
 	switch(phase)
 	{
 		case '0' : // first time two branches are established
-			if(branches(poplist,THRESHOLD, pair, pars) ){
+			if(branches(poplist,pars->threshold, pair, pars) ){
 				#if VERBOSE 
 				printf("phase 1 done!\n"); printlist(poplist, sampletime);
 				#endif
@@ -18,7 +18,7 @@ int checkphase(vector<pop> &poplist, char *PHASE, double pair[], double phasetim
 			break;
 			
 		case '1' : // last time two branches restablished
-			if(branches(poplist,THRESHOLD, pair, pars) ){
+			if(branches(poplist,pars->threshold, pair, pars) ){
 				#if VERBOSE 
 				printf("phase 1 done!\n"); printlist(poplist, sampletime);
 				#endif
@@ -33,7 +33,7 @@ int checkphase(vector<pop> &poplist, char *PHASE, double pair[], double phasetim
 				printf("dimorphism lost! back to phase 1 !\n"); printlist(poplist, sampletime);
 				#endif
 				phase = '1'; 
-			} else if(invade_pair(poplist, THRESHOLD, pair)) {
+			} else if(invade_pair(poplist, pars->threshold, pair)) {
 				#if VERBOSE
 				printf("phase 2 done!\n"); printlist(poplist, sampletime);
 				#endif
@@ -87,12 +87,14 @@ void initialize_population(vector<pop> &poplist, vector<CRow> &cmatrix, par_list
 			}
 		}
 
+
+
 /** Simulate a single replicate of evolutionary branching process.  Can record time to complete each phase of the process */
-void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double * phasetime, int * seed)
+void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double * phasetime, int * seed, int *threshold)
 {
 	double mc = 1 / (2 * *sigma_c2);
 	double mk = 1 / (2 * *sigma_k2);
-	par_list p = {*sigma_mu, *mu, mc, mk, *ko, 1 / *ko, *xo, NULL};
+	par_list p = {*sigma_mu, *mu, mc, mk, *ko, *xo, NULL, *threshold};
 	par_list * pars = &p;
 
 	gsl_rng *rng = gsl_rng_alloc (gsl_rng_default); 

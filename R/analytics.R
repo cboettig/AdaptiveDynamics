@@ -1,9 +1,4 @@
 # analytics.R
-MINF <- -1 
-INF <- 1
-MAXRES <- 1000
-
-pars <- list(sigma_mu = 0.01, sigma_c2 = .1, sigma_k2 = 1, ko = 100, mu = 0.01, xo = 0.5)
 
 
 ## Functions as defined in writeup
@@ -22,38 +17,30 @@ P <- function(x, pars, reals){
 	deltaX <- y[2] - y[1]
 	K(x,pars)*pars$mu*sum( sapply(y, function(y){ S(y,x,pars)*M(y,x,pars)*deltaX } ) )
 }
-reals <- seq(MINF, INF, length.out = MAXRES)
-P(.04, pars, reals)
-
 
 # canonical path
-## names makes this easier to read, but may slow down execution.
-times <- seq(0, 5e4, length.out=MAXRES);
 f <- function(t, y, p)
   {
 	list(-y * 0.5 * p$mu * p$sigma_mu^2 * K(y,p) / p$sigma_k2)
   }
-require(odesolve)
-meanpath <- lsoda(pars$xo,times,f, pars, rtol=1e-4, atol= 1e-6)
-#plot(meanpath)
-tstep = times[2] - times[1]
 
-P_path <- sapply(meanpath[,2], function(x) P(x,pars, reals) )
-#plot(P_path)
+waiting_time <- function(	reals = seq(-2, 2, length.out = 1000),
+							times = seq(0, 5e4, length.out = 1000), 
+							pars = list(sigma_mu = 0.03, mu = 0.01, sigma_c2 = .1, sigma_k2 = 1, ko = 100, xo = 0.5)
+						){
+	meanpath <- lsoda(pars$xo,times,f, pars, rtol=1e-4, atol= 1e-6)
+	P_path <- sapply(meanpath[,2], function(x) P(x,pars, reals) )
+	tstep = times[2] - times[1]
+	integral <- cumsum(P_path*tstep)
 
+	Pi <- function(Time){
+		Time_loc <- which(times > Time & times < Time + tstep)
+		P_path[Time_loc] * exp(-integral[Time_loc])
+	}
 
-integral <- cumsum(P_path*tstep)
-
-myPi <- function(Time){
-	Time_loc <- which(times > Time & times < Time + tstep)
-	P_path[Time_loc] * exp(-integral[Time_loc])
+	ti <- seq(1,max(times)/2, len=length(times)/2)
+	dist <- sapply(ti, Pi)
+	print( sum(dist*ti)/sum(dist) )
+	dist
 }
-
-myPi(500)
-
-ti <- seq(1,5e3, len=MAXRES/2)
-dist <- sapply(ti, myPi)
-#plot(ti, dist)
-print( sum(dist*ti)/sum(dist) )
-
 

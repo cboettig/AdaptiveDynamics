@@ -35,9 +35,9 @@ typedef struct {
 	double mc;
 	double mk;
 	double ko;
-	double ik;
 	double xo;
 	double y; // dummy for integration
+	double threshold; 
 } par_list;
 
 typedef struct {
@@ -108,5 +108,5 @@ double mean_waiting_time_1(par_list * pars);
 
 void analytics(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double *times, double *waiting_time_distribution, int * samples, double * mean);
 
-void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double * phasetime, int * seed);
+void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double * phasetime, int * seed, int * threshold);
 
