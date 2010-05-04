@@ -14,7 +14,7 @@ int main(void)
 	double * phasetime;
 	#pragma omp parallel private(phasetime) default(none) shared(sigma_mu, mu, sigma_k2, sigma_c2, ko, xo, seed)
 	{
-		phasetime = (double *) calloc(4,sizeof(double));
+		phasetime = (double *) calloc(6,sizeof(double));
 		branch_simulation(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, phasetime, &seed, &threshold);
 		free(phasetime);
 	}

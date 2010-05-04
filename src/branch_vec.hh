@@ -2,10 +2,9 @@
 #define VERBOSE 0
 #define PNG_ON 0
 
-#define SAMPLES (int) 1e4
+#define SAMPLES (int) 1e5
 #define MAXTIME 5e5
 #define MAXTRIALS  1
-#define THRESHOLD (int) 15
 #define X2 (double) -.02
 #define N2o (double) 0
 #define LINE (double) .6
@@ -70,13 +69,12 @@ double sumrates(vector<pop> &poplist);
 double bdry(double x, par_list * pars);
 int coexist(double x, double y, par_list * pars);
 int branchcheck(vector<pop> &poplist, int threshold, par_list * pars);
-int finishline(vector<pop> &poplist, double line);
+int finishline(vector<pop> &poplist, double line, int threshold);
 void averagelist(vector<pop> &poplist, double sampletime, double *mean, int samplenumber);
 
 void printaverage(double *mean);
 void printlist(vector<pop> &poplist, double sampletime);
 void printfulllist(vector<pop> &poplist, double sampletime);
-void printtraits(vector<pop> &poplist);
 void printfreq(vector<pop> &poplist);
 
 int mutual_invade(vector<pop> &poplist, int threshold, par_list * pars);
@@ -89,10 +87,6 @@ void update_rates(vector<pop> &poplist);
 void event(gsl_rng * rng, vector<pop> &poplist, double sum);
 
 
-int traits_above_thresh(vector<pop> &poplist);
-
-
-double * gettraits(vector<pop> &poplist);
 
 int invade_pair(vector<pop> &poplist, int threshold, double * pair);
 int branches(vector<pop> &poplist, int threshold, double * pair, par_list * pars);

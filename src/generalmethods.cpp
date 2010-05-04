@@ -6,7 +6,6 @@ double sumrates(vector<pop> &poplist)
 	for(p=poplist.begin(); p != poplist.end(); p++){
 		sum += p->birth + p->death; 
 	 }
-
 	return sum;
 }
 
@@ -94,9 +93,8 @@ int mutual_invade(vector<pop> &poplist, int threshold, par_list * pars)
 }
 
 
-int finishline(vector<pop> &poplist, double line)
+int finishline(vector<pop> &poplist, double line, int threshold)
 {
-	int threshold = THRESHOLD;
 	if( poplist.size() < 2 ){ return 0; }
 	else{
 		vector<pop>::iterator p, q;
@@ -163,15 +161,6 @@ void printlist(vector<pop> &poplist, double sampletime)
 	printf("\n");
 }
 
-void printtraits(vector<pop> &poplist)
-{
-	vector<pop>::iterator p;
-	for(p=poplist.begin(); p != poplist.end(); p++){
-		if(p->popsize > THRESHOLD) 
-			printf("%lf ", p->trait);
-	}
-}
-
 void printfulllist(vector<pop> &poplist, double sampletime)
 {
 	vector<pop>::iterator p;
@@ -191,33 +180,6 @@ void printfreq(vector<pop> &poplist)
 	int N1  = p->popsize;
 	double x1 = p->trait;
 	printf("%d %8d %8lf %8d %8lf %8lf\n", N1, N2, (double) N1/( (double) N1+N2), N1+N2, x1, x2 );
-}
-
-
-int traits_above_thresh(vector<pop> &poplist)
-{
-	vector<pop>::iterator p;
-	int i = 0;
-	for(p=poplist.begin(); p != poplist.end(); p++){
-		if(p->popsize > THRESHOLD)  i++;
-	}
-	return i;
-}
-
-
-double * gettraits(vector<pop> &poplist)
-{
-	double * dimorphism = (double *) 
-		malloc((poplist.size())*sizeof(double));	
-	vector<pop>::iterator p;
-	int i = 0;
-	for(p=poplist.begin(); p != poplist.end(); p++){
-		if(p->popsize > THRESHOLD){
-			 dimorphism[i] = p->trait;
-			 i++;
-		}
-	}
-	return dimorphism;
 }
 
 

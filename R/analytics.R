@@ -26,7 +26,7 @@ f <- function(t, y, p)
 
 waiting_time <- function(	reals = seq(-2, 2, length.out = 1000),
 							times = seq(0, 5e4, length.out = 1000), 
-							pars = list(sigma_mu = 0.03, mu = 0.01, sigma_c2 = .1, sigma_k2 = 1, ko = 100, xo = 0.5)
+							pars = list(sigma_mu = 0.03, mu = 0.005, sigma_c2 = .8, sigma_k2 = 1, ko = 500, xo = 0.5)
 						){
 	meanpath <- lsoda(pars$xo,times,f, pars, rtol=1e-4, atol= 1e-6)
 	P_path <- sapply(meanpath[,2], function(x) P(x,pars, reals) )
@@ -40,7 +40,9 @@ waiting_time <- function(	reals = seq(-2, 2, length.out = 1000),
 
 	ti <- seq(1,max(times)/2, len=length(times)/2)
 	dist <- sapply(ti, Pi)
-	print( sum(dist*ti)/sum(dist) )
-	dist
+	expected <- sum(dist*ti)/sum(dist)
+	variance <- sum(dist*ti^2)/sum(dist) - expected^2
+	print(expected)
+	list(times=ti, data=dist, mean=expected, var=variance)
 }
 

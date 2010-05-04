@@ -24,7 +24,7 @@ int checkphase(vector<pop> &poplist, char *PHASE, double pair[], double phasetim
 				#endif
 				phasetime[1] = sampletime;						
 				phase = '2';
-			}
+						}
 			break;
 			
 		case '2' : // last time the dimorphic pair is invaded successfully
@@ -33,6 +33,7 @@ int checkphase(vector<pop> &poplist, char *PHASE, double pair[], double phasetim
 				printf("dimorphism lost! back to phase 1 !\n"); printlist(poplist, sampletime);
 				#endif
 				phase = '1'; 
+				phasetime[4] += 1; // Number of times dimophism is lost in phase 2
 			} else if(invade_pair(poplist, pars->threshold, pair)) {
 				#if VERBOSE
 				printf("phase 2 done!\n"); printlist(poplist, sampletime);
@@ -48,8 +49,9 @@ int checkphase(vector<pop> &poplist, char *PHASE, double pair[], double phasetim
 				printf("dimophism lost in phase 3!\n"); printlist(poplist, sampletime); 
 				//printf("0 %.1lf %.1lf %.4lf %.4lf\n", phasetime[1] - phasetime[0], sampletime - phasetime[1], pair[0], pair[1]);
 				#endif
-				phase = '1';
-			} else if( finishline(poplist, LINE) ){
+				phase = '1'; 
+				phasetime[5] += 1; // Number of times dimophism is lost in phase 1
+			} else if( finishline(poplist, LINE, pars->threshold) ){
 				#if VERBOSE
 				printf("reached finishline!\n"); printlist(poplist, sampletime);
 				// printf("1 %.1lf %.1lf %.4lf %.4lf\n", phasetime[1] - phasetime[0], sampletime - phasetime[1], pair[0], pair[1]); 
@@ -130,7 +132,7 @@ void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *s
 		cmatrix.clear();
 
 
-		printf("%g %g %g %g\n", phasetime[0], phasetime[1], phasetime[2], phasetime[3]);
+		printf("%g %g %g %g %g %g\n", phasetime[0], phasetime[1], phasetime[2], phasetime[3], phasetime[4], phasetime[5]);
 	}
 	gsl_rng_free(rng);
 }
