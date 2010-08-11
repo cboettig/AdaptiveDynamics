@@ -54,6 +54,8 @@ int invade_pair(vector<pop> &poplist, int threshold, double * pair)
 	}
 }
 
+
+/* Identifies if branching has occurred.  Returns the pair that have branched */
 int branches(vector<pop> &poplist, int threshold, double * pair, par_list * pars)
 {
 	if( poplist.size() < 2 ){ return 0; }

@@ -8,7 +8,8 @@ branch_simulation <- function(sigma_mu = 0.05, mu = 1e-3, sigma_c2 = .1, sigma_k
 	if(is.null(seed)) { 
 		seed = runif(1)
 	}
-	out  <- .C( "_Z17branch_simulationPdS_S_S_S_S_S_PiS0_",
+	out  <- .C( #"_Z17branch_simulationPdS_S_S_S_S_S_PiS0_",
+				"branch_simulation",
 				as.double(sigma_mu), 
 				as.double(mu), 
 				as.double(sigma_c2), 
@@ -19,7 +20,12 @@ branch_simulation <- function(sigma_mu = 0.05, mu = 1e-3, sigma_c2 = .1, sigma_k
 				as.integer(seed),
 				as.integer(threshold)
 			)
-	out[[7]]
+	out[[7]]  # returns phasetime, a vector of length 6.  
+# phasetime[1] = 
+#			2  =
+#			3  =
+
+	
 }
 
 branching_time <- function(reps = 100, sigma_mu = 0.02, mu = 0.005, sigma_c2 = .1, sigma_k2 = 1, ko = 500, xo = 0.5, threshold = 30, cpus = 2){
