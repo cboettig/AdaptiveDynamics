@@ -2,7 +2,7 @@
 #include <omp.h>
 
 /** Function for reporting phase of branching and stopping the simulation */
-int checkphase(vector<pop> &poplist, char *PHASE, double pair[], double phasetime[], double sampletime, par_list * pars)
+int checkphase(vector<pop> &poplist, char *PHASE, double pair[], double phasetime[], double sampletime, par_list * pars, double xpair[], double ypair[])
 {	char phase = *PHASE;
 	int done = 0;
 	switch(phase)
@@ -12,7 +12,9 @@ int checkphase(vector<pop> &poplist, char *PHASE, double pair[], double phasetim
 				#if VERBOSE 
 				printf("phase 1 done!\n"); printlist(poplist, sampletime);
 				#endif
-				phasetime[0] = sampletime;						
+				phasetime[0] = sampletime;
+				xpair[0] = pair[0];
+				ypair[0] = pair[1];
 				phase = '2';
 			}
 			break;
@@ -23,6 +25,8 @@ int checkphase(vector<pop> &poplist, char *PHASE, double pair[], double phasetim
 				printf("phase 1 done!\n"); printlist(poplist, sampletime);
 				#endif
 				phasetime[1] = sampletime;						
+				xpair[1] = pair[0];
+				ypair[1] = pair[1];
 				phase = '2';
 						}
 			break;
@@ -39,6 +43,9 @@ int checkphase(vector<pop> &poplist, char *PHASE, double pair[], double phasetim
 				printf("phase 2 done!\n"); printlist(poplist, sampletime);
 				#endif
 				phasetime[2] = sampletime;
+				branches(poplist,pars->threshold, pair, pars); //update pair
+				xpair[2] = pair[0];
+				ypair[2] = pair[1];
 				phase = '3'; 
 			}
 			break;
@@ -56,6 +63,9 @@ int checkphase(vector<pop> &poplist, char *PHASE, double pair[], double phasetim
 				printf("reached finishline!\n"); printlist(poplist, sampletime);
 				// printf("1 %.1lf %.1lf %.4lf %.4lf\n", phasetime[1] - phasetime[0], sampletime - phasetime[1], pair[0], pair[1]); 
 				#endif
+				branches(poplist,pars->threshold, pair, pars); //update pair
+				xpair[3] = pair[0];
+				ypair[3] = pair[1];
 				phasetime[3] = sampletime;
 				phase = '4';
 			}
@@ -93,7 +103,7 @@ void initialize_population(vector<pop> &poplist, vector<CRow> &cmatrix, par_list
 
 /** Simulate a single replicate of evolutionary branching process.  Can record time to complete each phase of the process */
 extern "C" {
-	void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double * phasetime, int * seed, int *threshold)
+	void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double * phasetime, int * seed, int *threshold, double * xpair, double * ypair)
 	{
 		double mc = 1 / (2 * *sigma_c2);
 		double mk = 1 / (2 * *sigma_k2);
@@ -124,7 +134,7 @@ extern "C" {
 				time += gsl_ran_exponential(rng, 1/sum);
 				if(time > sampletime){
 		//			printlist(poplist,sampletime);
-					if(checkphase(poplist, &phase, pair, phasetime, sampletime, pars) ) break;
+					if(checkphase(poplist, &phase, pair, phasetime, sampletime, pars, xpair, ypair) ) break;
 					sampletime += Dt;
 				}
 				event_and_rates(rng, poplist, sum, cmatrix, pars);
@@ -133,11 +143,16 @@ extern "C" {
 			cmatrix.clear();
 
 
-			printf("%g %g %g %g %g %g\n", phasetime[0], phasetime[1], phasetime[2], phasetime[3], phasetime[4], phasetime[5]);
+			
 		}
 		gsl_rng_free(rng);
 	} // end function
 } // end extern "C"
+
+
+
+
+
 
 
 void analytics(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double *times, double *waiting_time_distribution, int * samples, double * mean)

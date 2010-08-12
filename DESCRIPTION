@@ -1,8 +1,8 @@
 Package: BranchingTime 
 Type: C program 
 Title: Waiting Times for Evolutionary Branching 
-Version: 0.0-1
-Date: 2010-04-20
+Version: 0.0-2
+Date: 2010-08-11
 Author: Carl Boettiger <cboettig@gmail.com>
 Maintainer: Carl Boettiger <cboettig@gmail.com>
 Description:

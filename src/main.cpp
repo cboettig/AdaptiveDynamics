@@ -11,12 +11,21 @@ int main(void)
 	int threshold = 30;
 	int seed = time(NULL);
 
-	double * phasetime;
+	double * phasetime, * xpair, * ypair;
 	#pragma omp parallel private(phasetime) default(none) shared(sigma_mu, mu, sigma_k2, sigma_c2, ko, xo, seed)
 	{
 		phasetime = (double *) calloc(6,sizeof(double));
-		branch_simulation(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, phasetime, &seed, &threshold);
+		xpair = (double *) calloc(6,sizeof(double));
+		ypair = (double *) calloc(6,sizeof(double));
+		branch_simulation(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, phasetime, &seed, &threshold, xpair, ypair);
+		printf("\n");
+		printf(" %g time to first dimorphism\n %g time persistant dimorphism was established\n %g time dimorphism invaded\n %g time at finish pt\n %g collapses after dimorphism invaded\n %g collapses after dimorphism established\n\n", phasetime[0], phasetime[1], phasetime[2], phasetime[3], phasetime[4], phasetime[5]);
+		int i;
+		printf("xpair \t\t ypair, \t\t diff\n");
+		for(i=0;i<4;i++) printf("%f\t %f\t %f\n", xpair[i], ypair[i], xpair[i]-ypair[i]);		
 		free(phasetime);
+		free(xpair);
+		free(ypair);
 	}
 
 	double mean = 0;
@@ -26,8 +35,8 @@ int main(void)
 	double times[50];
 	for(i=0;i<npts;i++) times[i] = 1000.*i/(double) npts;
 
-//	analytics(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, times, density, &npts, &mean);
-	printf("\n\n Mean: %g\n", mean );
+	analytics(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, times, density, &npts, &mean);
+	printf("\n\n Analytic Mean: %g\n", mean );
 
 	return 0;
 }
