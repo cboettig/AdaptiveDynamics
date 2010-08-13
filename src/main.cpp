@@ -35,8 +35,14 @@ int main(void)
 	double times[50];
 	for(i=0;i<npts;i++) times[i] = 1000.*i/(double) npts;
 
+	/* defined in branch_simulation w/ fns from ecoevo_model.cpp */
 	analytics(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, times, density, &npts, &mean);
 	printf("\n\n Analytic Mean: %g\n", mean );
+
+
+/* defined in analytics.cpp, rather slow.  quality of coexist approx tbd */
+//	analytic_contours_wrapper(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo);
+
 
 	return 0;
 }

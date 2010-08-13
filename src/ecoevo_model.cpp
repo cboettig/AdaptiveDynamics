@@ -1,5 +1,10 @@
 #include "branch_vec.hh"
 
+/* Contains the basic model specification.  Also contains functions for analytic approximations
+ *
+ */
+
+
 /*
 double C(double x, double y, par_list * pars){return exp( -2*gsl_pow_4(x-y)*gsl_pow_2(pars->mc) );}
 double K(double x, par_list * pars){return pars->ko*exp( -2*gsl_pow_4(x)*gsl_pow_2(pars->mk) );}

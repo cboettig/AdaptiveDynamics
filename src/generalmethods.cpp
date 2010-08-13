@@ -9,7 +9,7 @@ double sumrates(vector<pop> &poplist)
 	return sum;
 }
 
-
+/* Not actually used except by analytics */
 double bdry(double x, par_list * pars){return -x*(1+pars->mc/pars->mk)/(1-pars->mc/pars->mk) ; }
 
 int coexist(double x, double y, par_list * pars)
