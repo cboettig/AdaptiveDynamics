@@ -8,27 +8,27 @@ library(BranchingTime)
 #			6  = Number of times the dimoprhism is lost in phase 1 (in a single run, until reaching theshhold)
 
 rep <- 10
-cpu <- 2
+cpu <- 16
 
 all <- vector(mode="list", length=4)
 
-all[[1]] <- ensemble_sim(rep=rep, sigma_mu = 0.05, mu = 1e-3, sigma_c2 = .8, sigma_k2 = 1, ko = 500, xo = 0.1, threshold = 30, cpu=cpu)
+all[[1]] <- ensemble_sim(rep=rep, sigma_mu = 0.05, mu = 5e-3, sigma_c2 = .8, sigma_k2 = 1, ko = 500, xo = 0.1, threshold = 30, cpu=cpu)
 all[[2]] <- ensemble_sim(rep=rep, sigma_mu = 0.05, mu = 1e-3, sigma_c2 = .1, sigma_k2 = 1, ko = 500, xo = 0.1, threshold = 30, cpu=cpu)
-all[[3]] <- ensemble_sim(rep=rep, sigma_mu = 0.05, mu = 5e-4, sigma_c2 = .8, sigma_k2 = 1, ko = 500, xo = 0.1, threshold = 30, cpu=cpu)
+all[[3]] <- ensemble_sim(rep=rep, sigma_mu = 0.03, mu = 5e-4, sigma_c2 = .3, sigma_k2 = 1, ko = 500, xo = 0.1, threshold = 30, cpu=cpu)
 all[[4]] <- ensemble_sim(rep=rep, sigma_mu = 0.05, mu = 1e-4, sigma_c2 = .3, sigma_k2 = 1, ko = 500, xo = 0.1, threshold = 30, cpu=cpu)
 
-save(file = "run1.Rdat")
+save(list=ls(), file = "run2.Rdat")
 
 for(i in 1:4){
-	png(file=paste("waitingtimes_ens_", i, ".png", sep=""))
+	png(file=paste("run2_waitingtimes_ens_", i, ".png", sep=""))
 	plot_waitingtimes(all[[i]])
 	dev.off()
 
-	png(file=paste("butterfly_ens_", i, ".png", sep=""))
+	png(file=paste("run2_butterfly_ens_", i, ".png", sep=""))
 	plot_butterfly(all[[i]])
 	dev.off()
 	
-	png(file=paste("failures_ens_", i, ".png", sep=""))
+	png(file=paste("run2_failures_ens_", i, ".png", sep=""))
 	plot_failures(all[[i]])
 	dev.off()
 }

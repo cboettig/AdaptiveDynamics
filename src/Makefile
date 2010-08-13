@@ -19,7 +19,7 @@ one: $(FILES)
 	g++-4.4.1 $(CFLAGS) -o $(EXE) $(FILES) -fopenmp 
 
 clean:
-	rm -f *.o *.so *.exe
+	rm -f *.o *.so 
 
 # run make profile, then execute program, then run gprof -a branch_vec gmon.out
 profile:  $(FILES)
