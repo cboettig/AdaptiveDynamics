@@ -153,7 +153,7 @@
 	}
 
 
-	
+#define GRID 20	
 
 	int analytic_contours (par_list * pars)
 	{
@@ -162,27 +162,28 @@
 		/* hitting time parameters 	k1,k2,c12,Ko,left_bdry,right_bdry*/
 		double params[6] = {0, 0, 0, ko, 1e-12, 1};
 
-		x1=-.2;
-		for(i=0; i<20; i++){
-			x1 += .02;
-			x2 = -.2;
+		x1= - pars->xo;
+		#pragma omp for private(x1, x2)
+		for(i=0; i<GRID; i++){
+			x1 += 2*pars->xo/GRID;
+			x2 = -pars->xo;
 			params[0] = K(x1, pars)/ ko; 
-			for(j=0; j<20; j++){
-				x2 += .02;
+			for(j=0; j<GRID; j++){
+				x2 += 2*pars->xo/GRID;
 				if( coexist(x1,x2, pars) ){
 					params[1] = K(x2, pars)/ ko; 
 					params[2] = C(x1,x2, pars);
-					ph = GSL_MAX(phat(params), 1/ ko);
-					printf("%lf, %lf, %lf %lf\n", T(ph, params), x1, x2, ph);
+					ph = GSL_MAX(phat(params), 1/ko);
+					printf("%lf, %lf, %lf %e\n", T(ph, params), x1, x2, ph);
 				}
-				else printf("NA, %lf, %lf\n", x1, x2 );
+				else printf("NA, %lf, %lf %e\n", x1, x2, ph);
 			}
 		}
 		return 0;
 	}	
 
 
-void analytic_contours_wrapper(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo)
+void analytic_contours_wrapper(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double * times, double * xvals, double * yvals)
 {
 	double mc = 1 / (2 * *sigma_c2);
 	double mk = 1 / (2 * *sigma_k2);

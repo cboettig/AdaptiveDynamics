@@ -4,9 +4,7 @@
 
 #define SAMPLES (int) 1e5
 #define MAXTIME 5e5
-#define MAXTRIALS  1
-#define X2 (double) -.02
-#define N2o (double) 0
+#define MAXTRIALS  1 // done in C
 #define LINE (double) .6
 #define EPSILON (double) 1e-9
 #define R (double) 1.0
@@ -72,7 +70,7 @@ int branchcheck(vector<pop> &poplist, int threshold, par_list * pars);
 int finishline(vector<pop> &poplist, double line, int threshold);
 void averagelist(vector<pop> &poplist, double sampletime, double *mean, int samplenumber);
 
-void printaverage(double *mean);
+//void printaverage(double *mean);
 void printlist(vector<pop> &poplist, double sampletime);
 void printfulllist(vector<pop> &poplist, double sampletime);
 void printfreq(vector<pop> &poplist);
@@ -102,11 +100,24 @@ double mean_waiting_time_1(par_list * pars);
 
 
 extern "C" {
-void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double * phasetime, int * seed, int * threshold, double *xpair, double *ypair);
+void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, 
+						double *sigma_k2, double *ko, double *xo, 
+						double * phasetime, int * seed, int * threshold,
+						double *xpair, double *ypair);
 
 
-void analytic_contours_wrapper(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo);
+void analytic_contours_wrapper(double *sigma_mu, double *mu, double *sigma_c2, 
+								double *sigma_k2, double *ko, double *xo,
+								double *times, double *xval, double *yval);
 
-void analytics(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double *times, double *waiting_time_distribution, int * samples, double * mean);
+void analytics(double *sigma_mu, double *mu, double *sigma_c2, 
+				double *sigma_k2, double *ko, double *xo, 
+				double *times, double *waiting_time_distribution, 
+				int * samples, double * mean);
+
+void coexist_simulation(double *sigma_mu, double *mu, double *sigma_c2, 
+						double *sigma_k2, double *ko, double *xo, 
+						double * coexist_time, int * seed, int *threshold, 
+						double * xpos, double * ypos);
 
 }

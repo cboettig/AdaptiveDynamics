@@ -81,7 +81,7 @@ int checkphase(vector<pop> &poplist, char *PHASE, double pair[], double phasetim
 
 
 
-void initialize_population(vector<pop> &poplist, vector<CRow> &cmatrix, par_list * pars){
+void initialize_population(vector<pop> &poplist, vector<CRow> &cmatrix, par_list * pars, double X2, double N2o){
 
 			double init_parent = M_PI; //initial id, arbitrary
 			double N1o = round(K(pars->xo, pars));
@@ -109,13 +109,10 @@ extern "C" {
 		double mk = 1 / (2 * *sigma_k2);
 		par_list p = {*sigma_mu, *mu, mc, mk, *ko, *xo, NULL, *threshold};
 		par_list * pars = &p;
-
 		gsl_rng *rng = gsl_rng_alloc (gsl_rng_default); 
 		gsl_rng_set(rng, *seed);
-
 		vector<pop> poplist;
 		vector<CRow> cmatrix;
-
 		
 		
 		/* Simulation */
@@ -123,7 +120,8 @@ extern "C" {
 		for(int trial = 0; trial<MAXTRIALS; trial++){
 
 			/* Create an initial population */
-			initialize_population(poplist, cmatrix, pars);
+			double X2 = 0, N2o = 0;
+			initialize_population(poplist, cmatrix, pars, X2, N2o);
 			/* Reporting and tracking phase of branching */
 			char phase = '0';
 			double time = 0, sampletime = 0, Dt = MAXTIME/SAMPLES, sum;
@@ -147,28 +145,83 @@ extern "C" {
 		}
 		gsl_rng_free(rng);
 	} // end function
-} // end extern "C"
 
 
 
-
-
-
-
-void analytics(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double *times, double *waiting_time_distribution, int * samples, double * mean)
-{
-	double mc = 1 / (2 * *sigma_c2);
-	double mk = 1 / (2 * *sigma_k2);
-	par_list p = {*sigma_mu, *mu, mc, mk, *ko, 1 / *ko, *xo, NULL};
-	par_list * pars = &p;
-
-	int i;
-	for(i = 0; i < *samples; i++)
+	#define GRID 20
+	/* While it takes mutation parameters for formatting consistency, mutations are turned off */
+	void coexist_simulation(double *sigma_mu, double *mu, double *sigma_c2, 
+							double *sigma_k2, double *ko, double *xo, 
+							double * coexist_time, int * seed, int *threshold, 
+							double * xval, double * yval)
 	{
-		waiting_time_distribution[i] = waiting_time_1(times[i], pars);
-//		printf("%g\n", waiting_time_distribution[i] );
-	}
-	*mean = mean_waiting_time_1(pars);
+		gsl_rng *rng = gsl_rng_alloc (gsl_rng_default); 
+		gsl_rng_set(rng, *seed);
+		vector<pop> poplist;
+		vector<CRow> cmatrix;
+		double mc = 1 / (2 * *sigma_c2);
+		double mk = 1 / (2 * *sigma_k2);
+		par_list p = {*sigma_mu, 0, mc, mk, *ko, *xo, NULL, *threshold};
+		par_list * pars = &p;
+				
+		double x1 = *xo, x2=* xo;
+		/* Simulation */
+		x1 = -*xo;
+		#pragma omp for private(poplist, cmatrix, x1, x2)
+		for(int i=0; i<GRID; i++){
+			x1 += 2 * (*xo)/GRID;
+			x2 = -(*xo);
+			for(int j=0; j<GRID; j++){
+				x2 += 2 * (*xo)/GRID;
 
-}
+				/* Create an initial population */
+				double X2 = x2, N2o = K(x2, pars);
+				pars->xo = x1;
+				initialize_population(poplist, cmatrix, pars, X2, N2o);
+
+				double time = 0, sampletime = 0, Dt = MAXTIME/SAMPLES, sum;
+				while( time < MAXTIME ){
+					sum = sumrates(poplist);
+					time += gsl_ran_exponential(rng, 1/sum);
+					if(time > sampletime){
+//						printlist(poplist,sampletime);
+			//			if(checkphase(poplist, &phase, pair, phasetime, sampletime, pars, xpair, ypair) ) break;
+						if(poplist.size()>2) printf ("error! mutant!\n"); 
+						if( poplist.size()<2 ){
+							printf("%g %g %g\n", x1, x2, time);
+							xval[i*GRID+j] = x1; 
+							yval[i*GRID+j] = x2;
+							coexist_time[i*GRID+j] = time;
+							break;
+						}
+						sampletime += Dt;
+					}
+					event_and_rates(rng, poplist, sum, cmatrix, pars);
+				}
+				poplist.clear();
+				cmatrix.clear();
+			} // end loop over y values
+		} // end loop over x values
+		gsl_rng_free(rng);
+	}
+
+
+
+	void analytics(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double *times, double *waiting_time_distribution, int * samples, double * mean)
+	{
+		double mc = 1 / (2 * *sigma_c2);
+		double mk = 1 / (2 * *sigma_k2);
+		par_list p = {*sigma_mu, *mu, mc, mk, *ko, 1 / *ko, *xo, NULL};
+		par_list * pars = &p;
+
+		int i;
+		for(i = 0; i < *samples; i++)
+		{
+			waiting_time_distribution[i] = waiting_time_1(times[i], pars);
+	//		printf("%g\n", waiting_time_distribution[i] );
+		}
+		*mean = mean_waiting_time_1(pars);
+
+	}
+} // end extern "C"
 

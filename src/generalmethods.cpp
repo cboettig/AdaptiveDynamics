@@ -144,7 +144,7 @@ void averagelist(vector<pop> &poplist, double sampletime, double *mean, int samp
 	}
 	mean[samplenumber] += meantrait/totalpop;
 }
-
+/*
 void printaverage(double *mean)
 {
 	int samplenumber;
@@ -152,7 +152,7 @@ void printaverage(double *mean)
 		printf( "%lf, %lf\n", samplenumber*MAXTIME/SAMPLES, mean[samplenumber]/MAXTRIALS );
 	}
 }
-
+*/
 
 void printlist(vector<pop> &poplist, double sampletime)
 {

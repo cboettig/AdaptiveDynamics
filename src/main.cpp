@@ -7,12 +7,12 @@ int main(void)
 	double sigma_c2 = .1; //gsl_pow_2(1.2);
 	double sigma_k2 = 1;
 	double ko = 100;
-	double xo = .5;
+	double xo = .1;
 	int threshold = 30;
 	int seed = time(NULL);
 
 	double * phasetime, * xpair, * ypair;
-	#pragma omp parallel private(phasetime) default(none) shared(sigma_mu, mu, sigma_k2, sigma_c2, ko, xo, seed)
+	#pragma omp parallel private(phasetime, xpair, ypair) default(none) shared(sigma_mu, mu, sigma_k2, sigma_c2, ko, xo, seed, threshold)
 	{
 		phasetime = (double *) calloc(6,sizeof(double));
 		xpair = (double *) calloc(6,sizeof(double));
@@ -28,6 +28,9 @@ int main(void)
 		free(ypair);
 	}
 
+
+
+
 	double mean = 0;
 	int i;
 	int npts = 50;
@@ -39,9 +42,14 @@ int main(void)
 	analytics(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, times, density, &npts, &mean);
 	printf("\n\n Analytic Mean: %g\n", mean );
 
+	double coexist_time[400], xval[400], yval[400];
 
 /* defined in analytics.cpp, rather slow.  quality of coexist approx tbd */
-//	analytic_contours_wrapper(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo);
+	analytic_contours_wrapper(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, coexist_time, xval, yval);
+
+
+
+	coexist_simulation(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, coexist_time, &seed, &threshold, xval, yval);
 
 
 	return 0;

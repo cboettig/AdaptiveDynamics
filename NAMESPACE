@@ -1,8 +1,8 @@
 useDynLib(BranchingTime)
-export( branch_simulation,
-		ensemble_sim,
-		waiting_time,
-		plot_waitingtimes,
-		plot_failures,
-		plot_butterfly
+export( branch_simulation, ensemble_sim, 
+		plot_waitingtimes, plot_failures, plot_butterfly,
+		coexist_simulation,
+		waiting_time
+
+
 )
