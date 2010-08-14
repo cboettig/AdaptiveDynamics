@@ -2,9 +2,9 @@
 #define VERBOSE 0
 #define PNG_ON 0
 
-#define SAMPLES (int) 1e5
-#define MAXTIME 5e5
-#define MAXTRIALS  1 // done in C
+//#define SAMPLES (int) 1e5
+//#define MAXTIME 5e5
+#define MAXTRIALS  1 // leave as 1, parallel done in R
 #define LINE (double) .6
 #define EPSILON (double) 1e-9
 #define R (double) 1.0
@@ -103,7 +103,8 @@ extern "C" {
 void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, 
 						double *sigma_k2, double *ko, double *xo, 
 						double * phasetime, int * seed, int * threshold,
-						double *xpair, double *ypair);
+						double *xpair, double *ypair,
+						double *maxtime, int *samples);
 
 
 void analytic_contours_wrapper(double *sigma_mu, double *mu, double *sigma_c2, 
@@ -117,7 +118,8 @@ void analytics(double *sigma_mu, double *mu, double *sigma_c2,
 
 void coexist_simulation(double *sigma_mu, double *mu, double *sigma_c2, 
 						double *sigma_k2, double *ko, double *xo, 
-						double * coexist_time, int * seed, int *threshold, 
-						double * xpos, double * ypos);
+						double * coexist_time, int * seed, 
+						int *threshold, double * xpos, double * ypos,
+						double *maxtime, int *samples);
 
 }

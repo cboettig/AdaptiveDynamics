@@ -6,8 +6,8 @@ Date: 2010-08-11
 Author: Carl Boettiger <cboettig@gmail.com>
 Maintainer: Carl Boettiger <cboettig@gmail.com>
 Description:
-Depends: odesolve 
-Recommends: snowfall 
+Depends: odesolve, snowfall 
+Recommends: 
 URL: http://two.ucdavis.edu/~cboettig/software.html
 License: GPL (>= 2)
 

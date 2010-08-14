@@ -3,7 +3,7 @@
 # License: GPL v3.0
 
 
-branch_simulation <- function(sigma_mu = 0.03, mu = 1e-2, sigma_c2 = .1, sigma_k2 = 1, ko = 100, xo = 0.4, seed = NULL, threshold = 30){
+branch_simulation <- function(sigma_mu = 0.03, mu = 1e-2, sigma_c2 = .1, sigma_k2 = 1, ko = 100, xo = 0.2, seed = NULL, threshold = 30, maxtime=5e5, samples=1e5){
 	phasetime <- double(6);
 	xpair <- double(4);
 	ypair <- double(4);
@@ -19,13 +19,15 @@ branch_simulation <- function(sigma_mu = 0.03, mu = 1e-2, sigma_c2 = .1, sigma_k
 				as.double(sigma_k2), 
 				as.double(ko), 
 				as.double(xo), 
-				as.double(phasetime),
+				double(6),
 				as.integer(seed),
 				as.integer(threshold),
-				as.double(xpair),
-				as.double(ypair)
+				double(4),
+				double(4),
+				as.double(maxtime),
+				as.integer(samples)
 			)
-	names(out) <- c("sigma_mu", "mu", "sigma_c2", "sigma_k2", "ko", "xo", "phasetime", "seed", "threshold", "xpair", "ypair")
+	names(out) <- c("sigma_mu", "mu", "sigma_c2", "sigma_k2", "ko", "xo", "phasetime", "seed", "threshold", "xpair", "ypair", "maxtime", "samples")
 	class(out) <- "ad_simulation"
 	out
 	#phasetime <- out[[7]]  # returns phasetime, a vector of length 6.  

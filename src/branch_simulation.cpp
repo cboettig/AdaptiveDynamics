@@ -103,7 +103,7 @@ void initialize_population(vector<pop> &poplist, vector<CRow> &cmatrix, par_list
 
 /** Simulate a single replicate of evolutionary branching process.  Can record time to complete each phase of the process */
 extern "C" {
-	void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double * phasetime, int * seed, int *threshold, double * xpair, double * ypair)
+	void branch_simulation(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double * phasetime, int * seed, int *threshold, double * xpair, double * ypair, double *maxtime, int *samples)
 	{
 		double mc = 1 / (2 * *sigma_c2);
 		double mk = 1 / (2 * *sigma_k2);
@@ -124,10 +124,10 @@ extern "C" {
 			initialize_population(poplist, cmatrix, pars, X2, N2o);
 			/* Reporting and tracking phase of branching */
 			char phase = '0';
-			double time = 0, sampletime = 0, Dt = MAXTIME/SAMPLES, sum;
+			double time = 0, sampletime = 0, Dt = *maxtime / *samples, sum;
 			double pair[2]; 
 
-			while( time < MAXTIME ){
+			while( time < *maxtime ){
 				sum = sumrates(poplist);
 				time += gsl_ran_exponential(rng, 1/sum);
 				if(time > sampletime){
@@ -152,8 +152,8 @@ extern "C" {
 	/* While it takes mutation parameters for formatting consistency, mutations are turned off */
 	void coexist_simulation(double *sigma_mu, double *mu, double *sigma_c2, 
 							double *sigma_k2, double *ko, double *xo, 
-							double * coexist_time, int * seed, int *threshold, 
-							double * xval, double * yval)
+							double *coexist_time, int *seed, int *threshold, 
+							double *xval, double *yval, double *maxtime, int *samples)
 	{
 		gsl_rng *rng = gsl_rng_alloc (gsl_rng_default); 
 		gsl_rng_set(rng, *seed);
@@ -179,8 +179,8 @@ extern "C" {
 				pars->xo = x1;
 				initialize_population(poplist, cmatrix, pars, X2, N2o);
 
-				double time = 0, sampletime = 0, Dt = MAXTIME/SAMPLES, sum;
-				while( time < MAXTIME ){
+				double time = 0, sampletime = 0, Dt = *maxtime / *samples, sum;
+				while( time < *maxtime ){
 					sum = sumrates(poplist);
 					time += gsl_ran_exponential(rng, 1/sum);
 					if(time > sampletime){
@@ -188,7 +188,7 @@ extern "C" {
 			//			if(checkphase(poplist, &phase, pair, phasetime, sampletime, pars, xpair, ypair) ) break;
 						if(poplist.size()>2) printf ("error! mutant!\n"); 
 						if( poplist.size()<2 ){
-							printf("%g %g %g\n", x1, x2, time);
+//							printf("%g %g %g\n", x1, x2, time);
 							xval[i*GRID+j] = x1; 
 							yval[i*GRID+j] = x2;
 							coexist_time[i*GRID+j] = time;

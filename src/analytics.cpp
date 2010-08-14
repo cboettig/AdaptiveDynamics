@@ -155,7 +155,7 @@
 
 #define GRID 20	
 
-	int analytic_contours (par_list * pars)
+	int analytic_contours (par_list * pars, double *xval, double *yval, double *times)
 	{
 		double ko = pars->ko, x1, x2, ph;
 		int i, j;
@@ -174,9 +174,20 @@
 					params[1] = K(x2, pars)/ ko; 
 					params[2] = C(x1,x2, pars);
 					ph = GSL_MAX(phat(params), 1/ko);
-					printf("%lf, %lf, %lf %e\n", T(ph, params), x1, x2, ph);
+					double expected_coexistence = T(ph, params);
+
+					xval[GRID*i+j] = x1;
+					yval[GRID*i+j] = x2;
+					times[GRID*i+j] = expected_coexistence;
+
+//					printf("%lf, %lf, %lf %e\n", expected_coexistence, x1, x2, ph);
 				}
-				else printf("NA, %lf, %lf %e\n", x1, x2, ph);
+				else{
+					xval[GRID*i+j] = x1;
+					yval[GRID*i+j] = x2;
+					times[GRID*i+j] = 0;
+//					printf("0, %lf, %lf\n", x1, x2);
+				}
 			}
 		}
 		return 0;
@@ -190,7 +201,7 @@ void analytic_contours_wrapper(double *sigma_mu, double *mu, double *sigma_c2, d
 	par_list p = {*sigma_mu, *mu, mc, mk, *ko, 1 / *ko, *xo, NULL};
 	par_list * pars = &p;
 
-	analytic_contours(pars);
+	analytic_contours(pars, xvals, yvals, times);
 
 }
 

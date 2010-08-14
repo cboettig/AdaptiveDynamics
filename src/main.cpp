@@ -2,6 +2,8 @@
 
 int main(void)
 {
+	double maxtime = 5e4;
+	int samples = 1e4;
 	double sigma_mu = 0.03;
 	double mu = 1.e-2;
 	double sigma_c2 = .1; //gsl_pow_2(1.2);
@@ -17,7 +19,7 @@ int main(void)
 		phasetime = (double *) calloc(6,sizeof(double));
 		xpair = (double *) calloc(6,sizeof(double));
 		ypair = (double *) calloc(6,sizeof(double));
-		branch_simulation(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, phasetime, &seed, &threshold, xpair, ypair);
+		branch_simulation(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, phasetime, &seed, &threshold, xpair, ypair, &maxtime, &samples);
 		printf("\n");
 		printf(" %g time to first dimorphism\n %g time persistant dimorphism was established\n %g time dimorphism invaded\n %g time at finish pt\n %g collapses after dimorphism invaded\n %g collapses after dimorphism established\n\n", phasetime[0], phasetime[1], phasetime[2], phasetime[3], phasetime[4], phasetime[5]);
 		int i;
@@ -28,14 +30,9 @@ int main(void)
 		free(ypair);
 	}
 
-
-
-
-	double mean = 0;
-	int i;
-	int npts = 50;
-	double density[50];
-	double times[50];
+	int i, npts = 50;
+	double mean=0, density[50], times[50];
+	
 	for(i=0;i<npts;i++) times[i] = 1000.*i/(double) npts;
 
 	/* defined in branch_simulation w/ fns from ecoevo_model.cpp */
@@ -44,12 +41,16 @@ int main(void)
 
 	double coexist_time[400], xval[400], yval[400];
 
+
+	/* coexistence time */
+	coexist_simulation(	&sigma_mu, &mu, &sigma_c2, &sigma_k2, 
+						&ko, &xo, coexist_time, &seed, &threshold, 
+						xval, yval, &maxtime, &samples);
+	for(i=0;i<400;i++) printf("%g %g %g\n", coexist_time[i], xval[i], yval[i]);
+
 /* defined in analytics.cpp, rather slow.  quality of coexist approx tbd */
 	analytic_contours_wrapper(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, coexist_time, xval, yval);
-
-
-
-	coexist_simulation(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, coexist_time, &seed, &threshold, xval, yval);
+	for(i=0;i<400;i++) printf("%g %g %g\n", coexist_time[i], xval[i], yval[i]);
 
 
 	return 0;
