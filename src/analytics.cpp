@@ -193,15 +193,15 @@
 		return 0;
 	}	
 
+extern "C" {
+	void analytic_contours_wrapper(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double * times, double * xvals, double * yvals)
+	{
+		double mc = 1 / (2 * *sigma_c2);
+		double mk = 1 / (2 * *sigma_k2);
+		par_list p = {*sigma_mu, *mu, mc, mk, *ko, 1 / *ko, *xo, NULL};
+		par_list * pars = &p;
 
-void analytic_contours_wrapper(double *sigma_mu, double *mu, double *sigma_c2, double *sigma_k2, double *ko, double *xo, double * times, double * xvals, double * yvals)
-{
-	double mc = 1 / (2 * *sigma_c2);
-	double mk = 1 / (2 * *sigma_k2);
-	par_list p = {*sigma_mu, *mu, mc, mk, *ko, 1 / *ko, *xo, NULL};
-	par_list * pars = &p;
+		analytic_contours(pars, xvals, yvals, times);
 
-	analytic_contours(pars, xvals, yvals, times);
-
+	}
 }
-

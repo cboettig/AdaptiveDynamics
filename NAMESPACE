@@ -2,5 +2,7 @@ useDynLib(BranchingTime)
 export( branch_simulation, ensemble_sim, 
 		plot_waitingtimes, plot_failures, plot_butterfly,
 		coexist_simulation, ensemble_coexistence, coexist_analytics, plot_contours, ensemble_coexist_stats,
-		waiting_time
+		waiting_time,
+		bdry,
+		mirr
 )

@@ -1,5 +1,5 @@
 # File coexist_time.R
-coexist_simulation <- function(sigma_mu = 0.03, mu = 1e-2, sigma_c2 = .1, sigma_k2 = 1, ko = 100, xo = 0.2, seed = NULL, threshold = 30, maxtime=5e4, samples=1e5){
+coexist_simulation <- function(sigma_mu = 0.03, mu = 1e-2, sigma_c2 = .5, sigma_k2 = 1, ko = 100, xo = 0.2, seed = NULL, threshold = 30, maxtime=5e4, samples=1e5){
 	GRID = 20
 	if(is.null(seed)) { 
 		seed = runif(1)
@@ -26,7 +26,7 @@ coexist_simulation <- function(sigma_mu = 0.03, mu = 1e-2, sigma_c2 = .1, sigma_
 	
 }
 
-ensemble_coexistence <-function(reps = 100, cpu=2, sigma_mu = 0.03, mu = 1e-2, sigma_c2 = .1, sigma_k2 = 1, ko = 100, xo = 0.2, seed = NULL, threshold = 30, maxtime=5e4, samples=1e5){
+ensemble_coexistence <-function(reps = 100, cpu=2, sigma_mu = 0.03, mu = 1e-2, sigma_c2 = .5, sigma_k2 = 1, ko = 100, xo = 0.2, seed = NULL, threshold = 30, maxtime=5e4, samples=1e5){
 	require(snowfall)
 	if(cpu > 1){
 		sfInit(parallel=TRUE, cpu=cpu)
@@ -47,22 +47,27 @@ ensemble_coexistence <-function(reps = 100, cpu=2, sigma_mu = 0.03, mu = 1e-2, s
 }
 
 
-ensemble_coexist_stats <- function( object ){
+ensemble_coexist_stats <- function( object, log=FALSE, nlevels=20 ){
 	mean_times <- rowMeans(object$times)
 	gridsize <- sqrt(dim(object$times)[1] )
 	
 	grid <- 20
 	x <- seq(-object$xo, object$xo, length=grid)
 	z <- matrix(mean_times, nrow = gridsize)
-	contour(x,x,z, nlevels=11, lty=2, lwd=3)
-	
+	if(log) z <- log(z)
+	contour(x,x,z, lty=3, lwd=2, labcex=1.5, nlevels=nlevels)
+	lines(x, bdry(x, object$sigma_k2, object$sigma_c2), lwd=3, col="darkblue" )
+	lines(x, mirr(x, object$sigma_k2, object$sigma_c2), lwd=3, lty=1, col="darkblue" )
 }
 
-plot_contours <- function( object ){
+plot_contours <- function( object, log=FALSE ){
 	gridsize <- sqrt(length(object$xval) )
 	x <- seq(min(object$xval), max(object$xval), length = gridsize )
 	z <- matrix(object$coexist_time, nrow = gridsize)
-	contour(x,x,z, nlevels=11, lty=2, lwd=3)
+	if(log) z <- log(z)
+	contour(x,x,z, lty=2, lwd=3)
+	lines(x, bdry(x, object$sigma_k2, object$sigma_c2), lwd=3 )
+	lines(x, mirr(x, object$sigma_k2, object$sigma_c2), lwd=3, lty=2 )
 }
 
 
