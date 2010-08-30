@@ -47,7 +47,7 @@ ensemble_coexistence <-function(reps = 100, cpu=2, sigma_mu = 0.03, mu = 1e-2, s
 }
 
 
-ensemble_coexist_stats <- function( object, log=FALSE, nlevels=20 ){
+ensemble_coexist_stats <- function( object, log=FALSE, ... ){
 	mean_times <- rowMeans(object$times)
 	gridsize <- sqrt(dim(object$times)[1] )
 	
@@ -55,27 +55,25 @@ ensemble_coexist_stats <- function( object, log=FALSE, nlevels=20 ){
 	x <- seq(-object$xo, object$xo, length=grid)
 	z <- matrix(mean_times, nrow = gridsize)
 	if(log) z <- log(z)
-	contour(x,x,z, lty=3, lwd=2, labcex=1.5, nlevels=nlevels)
+	contour(x,x,z, ...)
 	lines(x, bdry(x, object$sigma_k2, object$sigma_c2), lwd=3, col="darkblue" )
 	lines(x, mirr(x, object$sigma_k2, object$sigma_c2), lwd=3, lty=1, col="darkblue" )
 }
 
-plot_contours <- function( object, log=FALSE ){
+
+plot_contours <- function( object, log=FALSE, ... ){
 	gridsize <- sqrt(length(object$xval) )
 	x <- seq(min(object$xval), max(object$xval), length = gridsize )
 	z <- matrix(object$coexist_time, nrow = gridsize)
 	if(log) z <- log(z)
-	contour(x,x,z, lty=2, lwd=3)
-	lines(x, bdry(x, object$sigma_k2, object$sigma_c2), lwd=3 )
-	lines(x, mirr(x, object$sigma_k2, object$sigma_c2), lwd=3, lty=2 )
+	contour(x,x,z, ...)
+	lines(x, bdry(x, object$sigma_k2, object$sigma_c2), lwd=3, col="darkblue" )
+	lines(x, mirr(x, object$sigma_k2, object$sigma_c2), lwd=3, lty=1, col="darkblue" )
 }
 
 
 coexist_analytics <- function(sigma_mu = 0.03, mu = 1e-2, sigma_c2 = .1, sigma_k2 = 1, ko = 100, xo = 0.2){
 	GRID = 20 # this is not optional, as it is not yet passed as a value but hardwired into the C code!!
-	if(is.null(seed)) { 
-		seed = runif(1)
-	}
 	out  <- .C( 
 				"analytic_contours_wrapper",
 				as.double(sigma_mu), 
@@ -91,7 +89,6 @@ coexist_analytics <- function(sigma_mu = 0.03, mu = 1e-2, sigma_c2 = .1, sigma_k
 	names(out) <- c("sigma_mu", "mu", "sigma_c2", "sigma_k2", "ko", "xo", "coexist_time", "xval", "yval")
 	class(out) <- "ad_coexist_times"
 	out
-	
 }
 
 
