@@ -14,7 +14,10 @@ int main(void)
 	int seed = time(NULL);
 
 	double * phasetime, * xpair, * ypair;
-	#pragma omp parallel private(phasetime, xpair, ypair) default(none) shared(sigma_mu, mu, sigma_k2, sigma_c2, ko, xo, seed, threshold)
+
+
+	printf("Testing branch_simulation...\n");
+	#pragma omp parallel private(phasetime, xpair, ypair) default(none) shared(sigma_mu, mu, sigma_k2, sigma_c2, ko, xo, seed, threshold, samples, maxtime)
 	{
 		phasetime = (double *) calloc(6,sizeof(double));
 		xpair = (double *) calloc(6,sizeof(double));
@@ -36,6 +39,7 @@ int main(void)
 	for(i=0;i<npts;i++) times[i] = 1000.*i/(double) npts;
 
 	/* defined in branch_simulation w/ fns from ecoevo_model.cpp */
+	printf("Testing analytic mean time to branching approximation...\n");
 	analytics(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, times, density, &npts, &mean);
 	printf("\n\n Analytic Mean: %g\n", mean );
 
@@ -43,16 +47,18 @@ int main(void)
 
 
 	/* coexistence time */
+	printf("Testing coexist_simulation...\n");
 	coexist_simulation(	&sigma_mu, &mu, &sigma_c2, &sigma_k2, 
 						&ko, &xo, coexist_time, &seed, &threshold, 
 						xval, yval, &maxtime, &samples);
 	for(i=0;i<400;i++) printf("%g %g %g\n", coexist_time[i], xval[i], yval[i]);
 
 /* defined in analytics.cpp, rather slow.  quality of coexist approx tbd */
+printf("Testing analytic_contours_wrapper...\n");
 	analytic_contours_wrapper(&sigma_mu, &mu, &sigma_c2, &sigma_k2, &ko, &xo, coexist_time, xval, yval);
 	for(i=0;i<400;i++) printf("%g %g %g\n", coexist_time[i], xval[i], yval[i]);
 
-
+printf("Done!\n");
 	return 0;
 }
 

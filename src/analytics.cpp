@@ -198,7 +198,7 @@ extern "C" {
 	{
 		double mc = 1 / (2 * *sigma_c2);
 		double mk = 1 / (2 * *sigma_k2);
-		par_list p = {*sigma_mu, *mu, mc, mk, *ko, 1 / *ko, *xo, NULL};
+		par_list p = {*sigma_mu, *mu, mc, mk, *ko, *xo, NULL, NULL};
 		par_list * pars = &p;
 
 		analytic_contours(pars, xvals, yvals, times);
