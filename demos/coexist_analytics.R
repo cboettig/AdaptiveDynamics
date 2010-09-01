@@ -1,8 +1,5 @@
 # analytics 
 require(BranchingTime)
-source("../R/branching_time.R")
-source("../R/analytics.R")
-source("../R/coexist_time.R")
 
 analytic1 <- coexist_analytics(sigma_c2 = .8, sigma_k2 = 1, ko = 500, xo = 0.2)
 save(list=ls(), file="analytics.Rdat")
