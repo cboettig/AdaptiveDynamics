@@ -1,5 +1,9 @@
 library(BranchingTime)
+library(socialR)
+tags <- c("adaptivedynamics", "simulations")
 
+log <- gitlog()
+tweet("Initiating #adaptivedynamics run on zero")
 # phasetime[1] = First time two coexisting branches are established
 #			2  = Last (most recent time) two coexisting branches were established 
 #			3  = Time to finish phase 2: (satisfies invade_pair() test: trimorphic, third type can coexist (positive invasion), is above threshold, two coexisting types already stored in pair
@@ -13,22 +17,23 @@ cpu <- 16
 all <- vector(mode="list", length=4)
 
 all[[1]] <- ensemble_sim(rep=rep, sigma_mu = 0.05, mu = 5e-3, sigma_c2 = .8, sigma_k2 = 1, ko = 500, xo = 0.1, threshold = 30, cpu=cpu)
+tweet(" ", tags=tags, commit=log$commitID)
 all[[2]] <- ensemble_sim(rep=rep, sigma_mu = 0.05, mu = 1e-3, sigma_c2 = .1, sigma_k2 = 1, ko = 500, xo = 0.1, threshold = 30, cpu=cpu)
 all[[3]] <- ensemble_sim(rep=rep, sigma_mu = 0.03, mu = 5e-4, sigma_c2 = .3, sigma_k2 = 1, ko = 500, xo = 0.1, threshold = 30, cpu=cpu)
 all[[4]] <- ensemble_sim(rep=rep, sigma_mu = 0.05, mu = 1e-4, sigma_c2 = .3, sigma_k2 = 1, ko = 500, xo = 0.1, threshold = 30, cpu=cpu)
 
-save(list=ls(), file = "run2.Rdat")
+save(list=ls(), file = "waiting_times.Rdat")
 
 for(i in 1:4){
-	png(file=paste("run2_waitingtimes_ens_", i, ".png", sep=""))
+	png(file=paste("waitingtimes_ens_", i, ".png", sep=""))
 	plot_waitingtimes(all[[i]])
 	dev.off()
 
-	png(file=paste("run2_butterfly_ens_", i, ".png", sep=""))
+	png(file=paste("butterfly_ens_", i, ".png", sep=""))
 	plot_butterfly(all[[i]])
 	dev.off()
 	
-	png(file=paste("run2_failures_ens_", i, ".png", sep=""))
+	png(file=paste("failures_ens_", i, ".png", sep=""))
 	plot_failures(all[[i]])
 	dev.off()
 }
