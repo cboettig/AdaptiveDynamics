@@ -3,7 +3,6 @@ library(socialR)
 tags <- c("adaptivedynamics", "simulations")
 
 log <- gitlog()
-tweet("Initiating #adaptivedynamics run on zero")
 # phasetime[1] = First time two coexisting branches are established
 #			2  = Last (most recent time) two coexisting branches were established 
 #			3  = Time to finish phase 2: (satisfies invade_pair() test: trimorphic, third type can coexist (positive invasion), is above threshold, two coexisting types already stored in pair
@@ -11,29 +10,30 @@ tweet("Initiating #adaptivedynamics run on zero")
 #			5  = Number of times the dimporphism is lost in phase 2 (in a single run, until reaching theshhold)
 #			6  = Number of times the dimoprhism is lost in phase 1 (in a single run, until reaching theshhold)
 
-rep <- 10
+rep <- 160
 cpu <- 16
+K <- 10
 
-all <- vector(mode="list", length=4)
+vary_sigma_c2 <- lapply(1:K, function(i){
+	sigma_c2 <- seq(.1, .8, length=10)
+	ensemble_sim(rep=rep, sigma_mu = 0.05, mu = 5e-3, sigma_c2 = sigma_c2[i], sigma_k2 = 1, ko = 500, xo = 0.1, threshold = 30, cpu=cpu) 
+	})
 
-all[[1]] <- ensemble_sim(rep=rep, sigma_mu = 0.05, mu = 5e-3, sigma_c2 = .8, sigma_k2 = 1, ko = 500, xo = 0.1, threshold = 30, cpu=cpu)
-tweet(" ", tags=tags, commit=log$commitID)
-all[[2]] <- ensemble_sim(rep=rep, sigma_mu = 0.05, mu = 1e-3, sigma_c2 = .1, sigma_k2 = 1, ko = 500, xo = 0.1, threshold = 30, cpu=cpu)
-all[[3]] <- ensemble_sim(rep=rep, sigma_mu = 0.03, mu = 5e-4, sigma_c2 = .3, sigma_k2 = 1, ko = 500, xo = 0.1, threshold = 30, cpu=cpu)
-all[[4]] <- ensemble_sim(rep=rep, sigma_mu = 0.05, mu = 1e-4, sigma_c2 = .3, sigma_k2 = 1, ko = 500, xo = 0.1, threshold = 30, cpu=cpu)
+vary_sigma_mu <- lapply(1:K, function(i){
+	sigma_mu  <- seq(.02, .1, length=K)
+	ensemble_sim(rep=rep, sigma_mu = sigma_mu[i], mu = 5e-3, sigma_c2 = 0.3, sigma_k2 = 1, ko = 500, xo = 0.1, threshold = 30, cpu=cpu) 
+	})
 
-save(list=ls(), file = "waiting_times.Rdat")
+vary_mu <- lapply(1:K, function(i){
+	mu <- seq(1e-4, 1e-2, length=K)
+	ensemble_sim(rep=rep, sigma_mu = 0.05, mu =mu[i], sigma_c2 = 0.3, sigma_k2 = 1, ko = 500, xo = 0.1, threshold = 30, cpu=cpu) 
+	})
 
-for(i in 1:4){
-	png(file=paste("waitingtimes_ens_", i, ".png", sep=""))
-	plot_waitingtimes(all[[i]])
-	dev.off()
+save(list=ls(), file="waiting_time.Rdat")
 
-	png(file=paste("butterfly_ens_", i, ".png", sep=""))
-	plot_butterfly(all[[i]])
-	dev.off()
-	
-	png(file=paste("failures_ens_", i, ".png", sep=""))
-	plot_failures(all[[i]])
-	dev.off()
-}
+system("git add waiting_time.Rdat")
+gitcommit()
+log <- gitlog()
+system("git push")
+tweet("Finished and saved data:", tags=tags, commit=log$commitID)
+
