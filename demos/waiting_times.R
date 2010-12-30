@@ -18,33 +18,34 @@ vary_sigma_c2 <- lapply(1:K, function(i){
 	sigma_c2 <- seq(.1, .8, length=K)
 	ensemble_sim(rep=rep, sigma_mu = 0.05, mu = 5e-4, sigma_c2 = sigma_c2[i], sigma_k2 = 1, ko = 500, xo = 0.1, threshold = 30, cpu=cpu) 
 	})
-	sigma_c2 <- seq(.1, .8, length=K)
-
-plot_phases(vary_sigma_c2, sigma_c2)
 
 vary_sigma_mu <- lapply(1:K, function(i){
-	sigma_mu  <- seq(.02, .1, length=K)
+	sigma_mu  <- seq(.01, .06, length=K)
 	ensemble_sim(rep=rep, sigma_mu = sigma_mu[i], mu = 5e-4, sigma_c2 = 0.3, sigma_k2 = 1, ko = 500, xo = 0.1, threshold = 30, cpu=cpu) 
 	})
-	sigma_mu  <- seq(.02, .1, length=K)
-plot_phases(vary_sigma_mu, sigma_mu)
-
 
 
 vary_mu <- lapply(1:K, function(i){
-	mu <- seq(1e-4, 1e-2, length=K)
+	mu <- seq(5e-5, 1e-3, length=K)
 	ensemble_sim(rep=rep, sigma_mu = 0.05, mu =mu[i], sigma_c2 = 0.3, sigma_k2 = 1, ko = 500, xo = 0.1, threshold = 30, cpu=cpu) 
 	})
-	mu <- seq(1e-4, 1e-2, length=K)
-plot_phases(vary_mu, mu)
+
+
+save(list=ls(), file="waiting_times2.Rdat")
+
+source("phase_plots.R")
+sigma_c2 <- seq(.1, .8, length=K)
+plot_phases(vary_sigma_c2, sigma_c2, xlab="sigma_c2")
+mu <- seq(1e-4, 1e-2, length=K)
+plot_phases(vary_mu, mu, xlab="mu")
+sigma_mu  <- seq(.02, .1, length=K)
+plot_phases(vary_sigma_mu, sigma_mu, xlab="sigma_mu")
 
 
 
-save(list=ls(), file="waiting_time2.Rdat")
 
-system("git add waiting_time2.Rdat")
+system("git add waiting_times.Rdat")
 gitcommit()
 log <- gitlog()
-system("git push")
 tweet("Finished and saved data:", tags=tags, commit=log$commitID)
 
