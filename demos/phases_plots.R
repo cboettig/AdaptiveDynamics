@@ -44,9 +44,9 @@ plot_phases <- function(all, parameter, xlab){
 
 	
 	plottimes <- function(){
-	plot_err(phase1_times, xlab, ylab="Num of times")
+	plot_err(phase3_times, xlab, ylab="Num of times")
 	plot_err(phase2_times, xlab, add=T, col="blue")
-	plot_err(phase3_times, xlab, add=T, col="green")
+	plot_err(phase1_times, xlab, add=T, col="green")
 	}
 
 social_plot(plottries(), file="attempts.png", tags="adaptivedynamics", comment="Number of attempts from phase 1")
