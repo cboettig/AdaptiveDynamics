@@ -16,22 +16,22 @@ K <- 10
 
 vary_sigma_c2 <- lapply(1:K, function(i){
 	sigma_c2 <- seq(.1, .8, length=K)
-	ensemble_sim(rep=rep, sigma_mu = 0.05, mu = 5e-4, sigma_c2 = sigma_c2[i], sigma_k2 = 1, ko = 500, xo = 0.1, threshold = 30, cpu=cpu) 
+	ensemble_sim(rep=rep, sigma_mu = 0.05, mu = 5e-4, sigma_c2 = sigma_c2[i], sigma_k2 = 1, ko = 500, xo = 0.1, threshold = 30, cpu=cpu, maxtime=5e6) 
 	})
 
 vary_sigma_mu <- lapply(1:K, function(i){
 	sigma_mu  <- seq(.01, .06, length=K)
-	ensemble_sim(rep=rep, sigma_mu = sigma_mu[i], mu = 5e-4, sigma_c2 = 0.3, sigma_k2 = 1, ko = 500, xo = 0.1, threshold = 30, cpu=cpu) 
+	ensemble_sim(rep=rep, sigma_mu = sigma_mu[i], mu = 5e-4, sigma_c2 = 0.3, sigma_k2 = 1, ko = 500, xo = 0.1, threshold = 30, cpu=cpu, maxtime=5e6) 
 	})
 
 
 vary_mu <- lapply(1:K, function(i){
 	mu <- seq(5e-5, 1e-3, length=K)
-	ensemble_sim(rep=rep, sigma_mu = 0.05, mu =mu[i], sigma_c2 = 0.3, sigma_k2 = 1, ko = 500, xo = 0.1, threshold = 30, cpu=cpu) 
+	ensemble_sim(rep=rep, sigma_mu = 0.05, mu =mu[i], sigma_c2 = 0.3, sigma_k2 = 1, ko = 500, xo = 0.1, threshold = 30, cpu=cpu, maxtime=5e6) 
 	})
 
 
-save(list=ls(), file="waiting_times2.Rdat")
+save(list=ls(), file="waiting_times.Rdat")
 
 source("phases_plots.R")
 sigma_c2 <- seq(.1, .8, length=K)

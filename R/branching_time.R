@@ -3,7 +3,7 @@
 # License: GPL v3.0
 
 
-branch_simulation <- function(sigma_mu = 0.03, mu = 1e-2, sigma_c2 = .1, sigma_k2 = 1, ko = 100, xo = 0.2, seed = NULL, threshold = 30, maxtime=5e5, samples=1e5){
+branch_simulation <- function(sigma_mu = 0.03, mu = 1e-2, sigma_c2 = .1, sigma_k2 = 1, ko = 100, xo = 0.2, seed = NULL, threshold = 30, maxtime=1e6, samples=1e5){
 	phasetime <- double(6);
 	xpair <- double(4);
 	ypair <- double(4);
