@@ -30,18 +30,27 @@ plot_phases <- function(all, parameter, xlab){
 	)
 
 
-	plot_err <- function(phase, xlab){
+	plot_err <- function(phase, xlab, add=F, col="black", ylab=ylab){
 		cm1 <- colMeans(phase)
 		cv1 <- sqrt(colVars(phase))
-		social_plot(
-		errbar(parameter, cm1, cm1+cv1, cm1-cv1, xlab=xlab, ylab="time/frequency"),
-		file="phase.png", tags="adaptivedynamics", comment="Number of attempts from phase 1")
+			errbar(parameter, cm1, cm1+cv1, cm1-cv1, xlab=xlab, ylab=ylab, add=add, col=col)
+			lines(parameter, cm1)
 	}
-	plot_err(phase1_attempts, xlab)
-	plot_err(phase2_attempts, xlab)
-	plot_err(phase1_times, xlab)
-	plot_err(phase2_times, xlab)
-	plot_err(phase3_times, xlab)
+
+	plottries <- function(){
+		plot_err(phase1_attempts, xlab, ylab="Num. of attempts")
+		plot_err(phase2_attempts, add=T, col="blue")
+	}
+
+	
+	plottimes <- function(){
+	plot_err(phase1_times, xlab, ylab="Num of times")
+	plot_err(phase2_times, xlab, add=T, col="blue")
+	plot_err(phase3_times, xlab, col="green")
+	}
+
+social_plot(plottries(), file="attempts.png", tags="adaptivedynamics", comment="Number of attempts from phase 1")
+social_plot(plottimes(), file="times.png", tags="adaptivedynamics", comment="Number of attempts from phase 1")
 
 }
 #social_plot(errbar(sigma_c2, cm1/cm2, cm1/cm2+(cv1+cv2), cm1/cm2-(cv1+cv2)),
