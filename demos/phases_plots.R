@@ -4,7 +4,7 @@ colVars <- function(X) sapply(1:dim(X)[2], function(i) var(X[,i]))
 # plot the output of waiting_times.R
 # all is one of vary_mu, vary_sigma_mu, etc
 
-plot_phases <- function(all, parameter, xlab="parameter"){
+plot_phases <- function(all, parameter, xlab){
 
 
 	sigma_c2 <- parameter
@@ -37,11 +37,11 @@ plot_phases <- function(all, parameter, xlab="parameter"){
 		errbar(parameter, cm1, cm1+cv1, cm1-cv1, xlab=xlab, ylab="time/frequency"),
 		file="phase.png", tags="adaptivedynamics", comment="Number of attempts from phase 1")
 	}
-	plot_err(phase1_attempts)
-	plot_err(phase2_attempts)
-	plot_err(phase1_times)
-	plot_err(phase2_times)
-	plot_err(phase3_times)
+	plot_err(phase1_attempts, xlab)
+	plot_err(phase2_attempts, xlab)
+	plot_err(phase1_times, xlab)
+	plot_err(phase2_times, xlab)
+	plot_err(phase3_times, xlab)
 
 }
 #social_plot(errbar(sigma_c2, cm1/cm2, cm1/cm2+(cv1+cv2), cm1/cm2-(cv1+cv2)),

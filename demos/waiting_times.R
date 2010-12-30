@@ -33,7 +33,7 @@ vary_mu <- lapply(1:K, function(i){
 
 save(list=ls(), file="waiting_times2.Rdat")
 
-source("phase_plots.R")
+source("phases_plots.R")
 sigma_c2 <- seq(.1, .8, length=K)
 plot_phases(vary_sigma_c2, sigma_c2, xlab="sigma_c2")
 mu <- seq(1e-4, 1e-2, length=K)
