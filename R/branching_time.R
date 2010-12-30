@@ -45,7 +45,7 @@ branch_simulation <- function(sigma_mu = 0.03, mu = 1e-2, sigma_c2 = .1, sigma_k
 	
 }
 
-ensemble_sim <- function(reps = 100, sigma_mu = 0.03, mu = 1e-2, sigma_c2 = .1, sigma_k2 = 1, ko = 100, xo = 0.4, threshold = 30, cpus = 2){
+ensemble_sim <- function(reps = 100, sigma_mu = 0.03, mu = 1e-2, sigma_c2 = .1, sigma_k2 = 1, ko = 100, xo = 0.4, threshold = 30, cpus = 2, maxtime=1e6){
 	require(snowfall)
 	if (cpus > 1){ 
 		sfInit(parallel=TRUE, cpus=cpus) 
@@ -56,7 +56,7 @@ ensemble_sim <- function(reps = 100, sigma_mu = 0.03, mu = 1e-2, sigma_c2 = .1, 
 	seeds <- 1e9*runif(reps)
 	out <- sfLapply(1:reps, 
 					function(i){
-						sim<-branch_simulation(sigma_mu, mu, sigma_c2, sigma_k2, ko, xo, seed=seeds[i], threshold = threshold) 
+						sim<-branch_simulation(sigma_mu, mu, sigma_c2, sigma_k2, ko, xo, seed=seeds[i], threshold = threshold, maxtime=maxtime) 
 						list(	pos_time=data.frame(times=sim$phasetime[1:4], x=sim$xpair[1:4], y=sim$ypair[1:4]), 
 								dimorph_fails = sim$phasetime[6], # "sigma_limited"?  Fails before coexistence establishes successful invader
 								trimorph_fails = sim$phasetime[5]	  # "mu_limited" ? Fails after coexistence extablishes successful invader
@@ -64,7 +64,7 @@ ensemble_sim <- function(reps = 100, sigma_mu = 0.03, mu = 1e-2, sigma_c2 = .1, 
 					}
 			)
 	sfStop()
-	pars <- list(sigma_mu = sigma_mu, mu=mu, sigma_c2 = sigma_c2, sigma_k2 = sigma_k2, ko = ko, xo = xo, threshold = threshold)
+	pars <- list(sigma_mu = sigma_mu, mu=mu, sigma_c2 = sigma_c2, sigma_k2 = sigma_k2, ko = ko, xo = xo, threshold = threshold, maxtime=maxtime)
 	output <- list(data = out, pars = pars, reps = reps)
 	class(output) <- "ad_ensemble"
 	output
