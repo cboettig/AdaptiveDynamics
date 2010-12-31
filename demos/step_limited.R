@@ -4,7 +4,7 @@ library(socialR)
 tags <- c("adaptivedynamics", "simulations")
 
 log <- gitlog()
-rep <- 16
+rep <- 16*5
 cpu <- 16
 K <- 7
 
@@ -15,6 +15,7 @@ vary_mu <- lapply(1:K, function(i){
 	})
 
 save(list=ls(), file="step_limited.Rdat")
+
 source("phases_plots.R")
 mu <- seq(4e-4, 1e-3, length=K)
 plot_phases(vary_mu, mu, xlab="mu")

@@ -45,14 +45,14 @@ plot_phases <- function(all, parameter, xlab){
 
 	
 	plottimes <- function(){
-	plot_err(phase3_times, xlab, ylab="Time to phase", lwd=3)
-	plot_err(phase2_times, xlab, add=T, col="blue")
-	plot_err(phase1_times, xlab, add=T, col="green")
-	legend("topleft", c("phase 3", "phase 2", "phase 1"), col=c("black", "blue", "green"), lty=1)
-}
+		plot_err(phase3_times, xlab, ylab="Time to phase", lwd=3)
+		plot_err(phase2_times, xlab, add=T, col="blue")
+		plot_err(phase1_times, xlab, add=T, col="green")
+		legend("topleft", c("phase 3", "phase 2", "phase 1"), col=c("black", "blue", "green"), lty=1)
+	}
 
-social_plot(plottries(), file="attempts.png", tags="adaptivedynamics", comment="Number of attempts from phase 1")
-social_plot(plottimes(), file="times.png", tags="adaptivedynamics", comment="Number of attempts from phase 1")
+social_plot(plottries(), file="attempts.png", tags="adaptivedynamics", comment="Number of attempts", mention="cboettig")
+social_plot(plottimes(), file="times.png", tags="adaptivedynamics", comment="times")
 
 }
 #social_plot(errbar(sigma_c2, cm1/cm2, cm1/cm2+(cv1+cv2), cm1/cm2-(cv1+cv2)),
@@ -60,8 +60,5 @@ social_plot(plottimes(), file="times.png", tags="adaptivedynamics", comment="Num
 
 
 
-
-
-#var_phase1_attempts
 
 
