@@ -45,7 +45,7 @@ plot_phases <- function(all, parameter, xlab){
 
 	
 	plottimes <- function(){
-	plot_err(phase3_times, xlab, ylab="Num of times", lwd=3)
+	plot_err(phase3_times, xlab, ylab="Time to phase", lwd=3)
 	plot_err(phase2_times, xlab, add=T, col="blue")
 	plot_err(phase1_times, xlab, add=T, col="green")
 	legend("topleft", c("phase 3", "phase 2", "phase 1"), col=c("black", "blue", "green"), lty=1)
