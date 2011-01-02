@@ -1,23 +1,17 @@
 #step_limited.R
 library(BranchingTime)
 library(socialR)
-tags <- c("adaptivedynamics", "simulations")
+tags <- c("adaptivedynamics simulations")
 
 log <- gitlog()
 rep <- 16*5
 cpu <- 16
-K <- 7
 
 
-vary_mu <- lapply(1:K, function(i){
-	mu <- seq(4e-4, 1e-3, length=K)
-	ensemble_sim(rep=rep, sigma_mu = 0.08, mu =mu[i], sigma_c2 = 0.5, sigma_k2 = 1, ko = 500, xo = 0.1, threshold = 30, cpu=cpu, maxtime=1e7) 
-	})
+a <- ensemble_sim(rep=rep, sigma_mu = 0.05, mu =.0001, sigma_c2 = 0.3, sigma_k2 = 1, ko = 500, xo = 0.5, threshold = 30, cpu=cpu, maxtime=1e7) 
+b <-  ensemble_sim(rep=rep, sigma_mu = 0.02, mu =.005, sigma_c2 = 0.9, sigma_k2 = 1, ko = 500, xo = 0.5, threshold = 30, cpu=cpu, maxtime=1e7) 
 
 save(list=ls(), file="step_limited.Rdat")
 
-source("phases_plots.R")
-mu <- seq(4e-4, 1e-3, length=K)
-plot_phases(vary_mu, mu, xlab="mu")
-
-
+social_plot(plottries(a), file="step_limited.png", tags=tags)
+social_plot(plottries(b), file="step_limited.png", tags=tags)
