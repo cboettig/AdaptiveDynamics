@@ -86,8 +86,8 @@ plot_waitingtimes <- function(ensemble, differences=FALSE, max_time=NULL, HISTOG
 	if(is.null(max_time)) max_time <- max( unlist( pts[[1]][1,]),  unlist( pts[[2]][1,]), unlist( pts[[3]][1,]),  unlist( pts[[4]][1,]) )
 
 	if(!HISTOGRAM){
-		plot(density(unlist( pts[[1]][1,] )), xlab='Time', lwd=3, lty=1, col='black', xlim=c(0,max_time), main="Waiting Time Distributions")
-		lines(density(unlist( pts[[2]][1,] )), lwd=3, lty=2, col='purple')
+	#	plot(density(unlist( pts[[1]][1,] )), xlab='Time', lwd=3, lty=1, col='black', xlim=c(0,max_time), main="Waiting Time Distributions")
+		plot(density(unlist( pts[[2]][1,] )), lwd=3, lty=2, col='purple')
 		lines(density(unlist( pts[[3]][1,] )), lwd=3, lty=3, col='blue')
 		lines(density(unlist( pts[[4]][1,] )), lwd=3, lty=4, col='green')
 		legend(	'topright', 

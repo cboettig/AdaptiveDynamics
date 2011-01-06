@@ -13,5 +13,6 @@ cpu <- 16
 
 #save(list=ls(), file="step_limited.Rdat")
 load("step_limited.Rdat")
+source("../R/branching_time.R")
 social_plot(plot_waitingtimes(a), file="step_limited.png", tags=tags)
 social_plot(plot_waitingtimes(b), file="step_limited.png", tags=tags)
