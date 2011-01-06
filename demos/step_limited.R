@@ -13,5 +13,5 @@ cpu <- 16
 
 #save(list=ls(), file="step_limited.Rdat")
 load("step_limited.Rdat")
-social_plot(plot_failures(a), file="step_limited.png", tags=tags)
-social_plot(plot_failures(b), file="step_limited.png", tags=tags)
+social_plot(plot_waitingtimes(a), file="step_limited.png", tags=tags)
+social_plot(plot_waitingtimes(b), file="step_limited.png", tags=tags)
