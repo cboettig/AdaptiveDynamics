@@ -9,5 +9,5 @@ Description:
 Depends: odesolve, snowfall 
 Recommends: 
 URL: http://two.ucdavis.edu/~cboettig/software.html
-License: GPL (>= 2)
+License: CC0
 
