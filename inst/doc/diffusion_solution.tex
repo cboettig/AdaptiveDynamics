@@ -1,0 +1,67 @@
+%        File: drift_effects.tex
+%     Created: Sun Aug 02 11:00 AM 2009 C
+% Last Change: Sun Aug 02 11:00 AM 2009 C
+%
+\documentclass[letterpaper,10pt]{article} 
+\usepackage[pdftex]{color,graphicx} 
+\usepackage{amsmath, amsfonts, amssymb, latexsym, inputenc, moreverb, wrapfig, subfigure, array, lscape, setspace, cite}
+\usepackage[pdftex, colorlinks]{hyperref}
+\newcommand{\ud}{\mathrm{d}} 
+\newcommand{\degree}{$^{\circ}$}
+\newcommand{\tb}[1]{\textcolor{blue}{#1}} 
+\newcommand{\E}{\mathbb{E}}
+
+%\usepackage{fullpage} %% 1 inch margins by default
+%\usepackage{pslatex}  %% use normal postscript fonts (like times new roman)
+
+\title{}
+\author{Carl Boettiger}
+\begin{document}
+\maketitle
+
+\begin{align*}
+\ud n_1 = r n_1 \left(1 -  \frac{n_1 + C(x_1, x_2) n_2}{K(x_1) } \right) \ud t + \frac{1}{\sqrt{K_o} } \sqrt{r n_1 \left(1 +  \frac{n_1 + C(x_1, x_2) n_2}{K(x_1) } \right) } \ud W_1
+\end{align*}
+
+\begin{align*}
+p &= \frac{n_1}{n}, \quad q = 1-p = \frac{n_2}{n} \quad n = n_1 + n_2 \\
+\ud p &= \frac{\ud n_1}{n}, \quad \ud q = \frac{\ud n_2}{n} \\
+\ud n &= \ud n_1 + \ud n_2 = n (\ud p + \ud q) 
+\end{align*}
+
+\begin{align*}
+\ud p(p,n) = \alpha_1(p,n) \ud t + \sqrt{ \alpha_2(p,n) } \ud W_p \\
+\ud n(p,n) = \beta_1(p,n) \ud t +  \sqrt{ \beta_2(p,n) } \ud W_n
+\end{align*}
+
+\begin{align*}
+f_i(p) =  r p \left(1 -  n(p) \frac{p + c_{12}(1-p) }{k_i } \right) \\
+g_i(p) =  r p \left(1 +  n(p) \frac{p + c_{12}(1-p) }{k_i } \right) 
+\end{align*}
+
+\begin{align*}
+\alpha_1 &=  f_1(p) \\ 
+\alpha_2 &= \frac{ g_1(p) }{K_0 n(p) } \\
+\beta_1 &= n f_1(p) + n f_2(1-p)  \\
+\beta_2 &= n*\frac{g_1(p)+g_2(1-p)}{K_0 } 
+\end{align*}
+
+
+\begin{align*}
+\frac{\ud}{\ud t} \sigma_p &= 2 \partial_p \alpha_1(p,n) \sigma_p  +2\partial_n\alpha_1(p,n) \langle p n \rangle +  \alpha_2(p,n) \\
+\frac{\ud }{\ud t} \sigma_n&= 2 \partial_n \beta_1(p,n) \sigma_n  +2\partial_p\beta_1(p,n) \langle p n \rangle +  \beta_2(p,n) \\
+\frac{\ud }{\ud t} \langle p n \rangle &= \partial_n \alpha_1(p,n) \sigma_n  +\partial_p \alpha_1 \langle pn \rangle + \partial_p\beta_1 (p,n) \sigma_p + \partial_n \beta_1(p,n) \langle p n \rangle
+\end{align*}
+
+
+\begin{align*}
+\partial_p \alpha_1 &= 
+\\ \partial_n \alpha_1 &=
+\\ \partial_p \beta_1 &= 
+\\ \partial_n \beta_1 &=
+\end{align*}
+
+
+\end{document}
+
+

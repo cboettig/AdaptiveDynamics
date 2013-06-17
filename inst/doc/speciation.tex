@@ -1,0 +1,92 @@
+\documentclass[authoryear,1p,10pt]{elsarticle}
+\bibliographystyle{elsarticle-harv}
+%\usepackage{graphicx}
+\usepackage{amsmath, amsfonts, amssymb, latexsym, wrapfig, subfigure, array, setspace, cite}
+\usepackage{lineno}
+%\linenumbers
+%\usepackage[pdftex]{color}
+%\definecolor{darkblue}{rgb}{0,0,0.5}
+%\definecolor{darkgreen}{rgb}{0,0.5,0}
+%\usepackage[pdftex, colorlinks, citecolor=darkblue,linkcolor=darkgreen]{hyperref}
+%\usepackage[pdftex, colorlinks]{hyperref}
+\textwidth 6.75in
+\oddsidemargin -0.15in
+\evensidemargin -0.15in
+\textheight 9in
+\topmargin -0.5in
+\newcommand{\ud}{\mathrm{d}}
+\newcommand{\degree}{$^{\circ}$}
+\newcommand{\tb}[1]{\textcolor{blue}{#1}} 
+\newcommand{\E}{\text{E}}
+
+
+
+ 
+\begin{document}
+\begin{frontmatter}
+\title{Stochastic Impediments to Evolutionary Branching}
+\author[carl]{Carl Boettiger\corref{cor1}}
+\ead{cboettig@ucdavis.edu}
+\cortext[cor1]{Corresponding author.}
+\author[rupert]{Rupert Mazzucco\corref{cor1}}
+\ead{mazzucco@iiasa.ac.at}
+\author[ulf]{Ulf Dieckmann\corref{cor1}}
+\ead{dieckmann@iiasa.ac.at}
+\address[carl]{Center for Population Biology, University of California, Davis, United States}
+\address[rupert]{International Institute for Applied Systems Analysis, Austria}
+\address[ulf]{International Institute for Applied Systems Analysis, Austria}
+\begin{abstract}
+We show stochastic effects due to finite population sizes can pose a significant impediment to evolutionary branching.   We investigate these effects by exploring the waiting time until evolutionary branching occurs using both individual-based simulationand analytic approximations.  The accuracy of our approximation demonstrates that adaptive branching can be thought of as occurring in four phases: (1) (2) (3) (4).  Different ranges of parameters will make different phases become rate-limiting.  We find that the delicate balance of coexistence early in evolutionary branching is most often rate-limiting, and provide a convenient approximation to the waiting time based on this limit.   
+\end{abstract}
+\begin{keyword}
+Evolution \sep demographic stochasticity \sep branching \sep adaptive dynamics
+\end{keyword}
+\end{frontmatter}
+\section{Introduction}
+\begin{itemize}
+\item Sympatric speciation and the adaptive dynamics of evolutionary branching
+\item Previous work on stochasticity in branching \citet{Claessen2007a, Claessen2007, Claessen2008, Johansson2006}
+\item Summarize results and outline paper 
+\end{itemize}
+\section{Theory and methods}
+\subsection{Model Formulation}
+Paragraph reviewing basics of evolutionary branching, \citet{Geritz1997}, \citet{Dieckmann1999a}.
+\subsubsection{Rosenzweig model of competition for a limiting resource}
+Paragraph reviewing the competition model
+\subsubsection{Individual-based simulation}
+Paragraph reviewing the individual based model implementation
+\subsection{Four phases of evolutionary branching}
+\begin{enumerate}
+\item Convergence the branching point
+\item Invasion of the coexistence region
+\item Coexistence until next invasion
+\item Divergence from the branching point.
+\end{enumerate}
+Figure 1: with two panels:  (a) shows eachs of these phases on the Pairwise Invasibility Plot. (b) Histograms for each showing the absolute population abundance at each trait value during each of the phases.   
+
+\section{Results}
+\subsection{Full Approximation}
+Figure 2: Distribution of waiting times from simulation, with full approximation fit, with rate-limiting approximation from phase 3.
+\subsection{Rate-limiting coexistence until next invasion}
+Figure 3: Escape from potential energy well approach used to calculate the coexistence time
+\subsection{Other rate-limiting steps}
+Figure 4: Conceptual figure showing biological scenario corresponding to each limit, the resultant approximation, and simulation from that limiting case.
+
+
+\section{Discussion}
+\begin{itemize}
+\item What understanding waiting times tells us about the evolutionary branching process
+\item How quantifying rate limiting steps helps identify the most relevant parameters to measure in determining rates of evolutionary branching.  
+\item Extensions of the approach, such as the inclusion of environmental variation
+\end{itemize}
+
+\section{Acknowledgements}
+\begin{itemize}
+\item IIASA
+\item NAS, DoE funding
+\item other?
+\end{itemize}
+\bibliography{AdaptiveDynamics.bib}
+\end{document}
+
+

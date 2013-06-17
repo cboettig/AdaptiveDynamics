@@ -1,0 +1,102 @@
+%        File: phase1.tex
+%     Created: Sat May 01 01:00 AM 2010 P
+% Last Change: Sat May 01 01:00 AM 2010 P
+%
+\documentclass[letterpaper,10pt]{article} 
+\usepackage[pdftex]{color,graphicx} 
+\usepackage{amsmath, amsfonts, amssymb, latexsym, inputenc, moreverb, wrapfig, subfigure, array, lscape, setspace}
+\usepackage[pdftex, colorlinks]{hyperref}
+\newcommand{\ud}{\mathrm{d}} 
+\newcommand{\degree}{$^{\circ}$}
+\newcommand{\tb}[1]{\textcolor{blue}{#1}} 
+\newcommand{\E}{\text{E}}
+
+%\usepackage{fullpage} %% 1 inch margins by default
+%\usepackage{pslatex}  %% use normal postscript fonts (like times new roman)
+
+\title{Phase 1}
+\author{Carl Boettiger}
+\begin{document}
+\maketitle
+We consider the classic adaptive dynamics model for evolutionary branching under competition for a limiting resource by Dieckmann and Doebeli (1999).  The population dynamics of $N(x,t)$ individuals each with focal trait $x$ are given by a continuous time birth-death process with rates 
+\begin{align}
+b(N) = & r \nonumber \\
+d(N) = & r \frac{\sum_yN(y,t)C(x,y)}{K(x)} .\label{general_logistic}
+\end{align}
+The focal trait $x$ can be thought of as some continuous phenotypic variable, such as beak size, which affects resource consumption.  Niche differences driving speciation arise from differences in this trait.  In the model, $K(x)$ is the resource kernel which determines the equilibrium population density and $C(x,y)$ is a the competition kernel, describing the relative change in death rate of individuals of type $x$ due to competition by individuals of type $y$.  Given $C(x,x)=1$, the equilibrium density of a monomorphic population is $N^{\ast}(x)=K(x)$.  We assume the following Gaussian forms,
+\begin{equation}
+K(x)=K_0e^{-x^2/(2\sigma_k^2)}, \label{K}
+\end{equation}
+and
+\begin{equation}
+C(x,y)=e^{-(x-y)^2/(2\sigma_c^2)}, \label{C}
+\end{equation}
+where $\sigma_k$ and $\sigma_c$ are scale factors for the resource distribution and competition kernels respectively.  $\sigma_c$ can be though of as the niche size.  We focus on the case $\sigma_k>\sigma_c$, for which the model has an evolutionary branching point at $x=0$
+
+The evolutionary dynamics are specified only at the phenotypic level: We assume that with probability $\mu$ an individual birth results in a mutant offspring, and that the mutant trait is chosen from a Gaussian distribution centered at the trait value of the parents and with a variance $\sigma_{\mu}^2$. 
+
+
+
+Classically, the approach to the branching point is governed by the canonical equation of adaptive dynamics.  To account for branching we have to revisit the original derivation of this equation where we relax the limit of small mutational steps sufficiently to allow mutants to enter the coexitence region, $P_2$.  The derivation of the canonical equation integrates only over those mutants that fall into the invasion-substitution region, $P_1$.  However, since the derivation is done in the limit of small mutational step sizes, this encompasses essentially all of the weight of the mutational kernel, and to good approximation can thus be replaced with the entire $P_1 \cup P_2$ region.  Recall that in the derivation of the canonical equation, deleterious mutations are given zero probability of fixing (from the branching process approximation), and hence this corresponds to integrating over half of the real line $\mathbb{R}$.  
+
+\begin{align}
+\frac{\ud \bar x}{\ud t} = \mu N^*(x) \phantom \cdot \partial_y s(y,x) \Big|_x \int_{P_1} [y-x]^2 M(y-x) \ud [y-x]
+\label{canonical}
+\end{align}
+
+The probability of such a mutant occurring in our monomorphic population of trait $x$ is given by the probability that any mutant occurs (given by the population size, approximately $K(x)$ at equilibrium, times the birth rate $b(x)$ times the mutation rate $\mu$) times the probability that the mutation lies on the opposite side of the coexistence boundary, which we denote as $\phi(x)$ and $\psi(x)$, which is $\phi(x)$ reflected across the line $y=x$.  This depends on the mutational kernel, $M(y,x)$ which gives the probability that a mutant arising from a resident population of trait $x$ bears trait $y$ that falls withing the coexistance region as follows:
+
+\begin{equation*}
+\int_{-\infty}^{\phi(x)} M(y,x) \ud y + \int_{\psi(x)}^{\infty} M(y,x) \ud y 
+\end{equation*}
+Without loss of generality let us assume that the singular strategy $x^* = 0$ and that we start from some trait value $x_0 > x^*$.  Additionally, let us we assume $M(y,x)$ is Gaussian in $y-x$ with mean 0 and variance $\sigma_{\mu}^2$. However, we do not wish to consider all such mutants $y$, but only those that survive.  We multiply the probability of a mutant having trait $y$, $M(y,x)$, times the probability that is survives drift.  This probability we quote from the Galton-Watson branching process, $1-\tfrac{d(y,x)}{b(y,x)}$. Using our model for birth and death rates~\eqref{general_logistic}, the probability of surviving branching is
+
+\begin{equation}
+1-\frac{C(y,x)K(x)}{K(y)} := S(y,x)
+\label{S}
+\end{equation}
+
+which we denote as $S(y,x)$ as indicated. Hence we modify our integral to consider all mutants $y < x^*$ which occur with probability $M(y,x)$ and then survive with probability $S(y,x)$, and write down the rate $P(x)$ at which a mutant which leads to branching occurs from our monomorphic population with trait $x$:
+
+\begin{equation}
+P(x) := r \mu K(x)\left( \int_{-\infty}^{\phi(x)} M(y,x) S(y,x) \ud y + \int_{\psi(x)}^{\infty} M(y,x) S(y,x) \ud y  \right)
+\label{MSerf}
+\end{equation}
+
+Though a little cumbersome, this can be written in nearly closed form (using the error function). For our particular model $s(y,x)$, we can write the boundaries $\phi(x)$ and $\psi(x)$ as 
+
+\begin{align}
+\phi(x) = x\frac{\frac{\sigma_k^2}{\sigma_c^2}+1}{\frac{\sigma_k^2}{\sigma_c^2}-1} \nonumber \\
+\psi(x) = x\frac{\frac{\sigma_k^2}{\sigma_c^2}-1}{\frac{\sigma_k^2}{\sigma_c^2}+1}
+\label{phipsi}
+\end{align}
+Then, given a starting condition $x_0$, we can determine the expected trait $x$ at time $t$ of a monomorphic resident population by integrating the canonical equation,
+
+\begin{equation}
+\frac{\ud x}{\ud t} = \frac{1}{2} \mu \sigma_{mu}^2 N^*(x) \partial_y s(y,x)
+\end{equation}
+
+which for our model is  
+\begin{equation}
+\frac{\ud x}{\ud t} = \frac{-x}{2\sigma_k^2} r \mu \sigma_{\mu}^2 K(x) 
+\end{equation}
+While no closed form solution exists for $x(t)$ in this case, if we assume $x_0 \ll \sigma_k$ then to good approximation we can view $K(x)$ to be constant over the interval and take our path to be:
+
+\begin{equation}
+x(t) = x_0 \exp\left( -r \mu \sigma_{\mu}^2 K_0 t/\sigma_k^2\right)
+\end{equation}
+
+Using this mean path, we can write down an approximation for the rate of a branching mutant occurring as a function of time, $P(x(t))$.  Using this time dependent rate, the probability of not branching after time $T$ is simply $\exp\left( - \int_0^T P(t)\ud t \right)$.  One minus this is the probability branching by time $T$; i.e. the cumulative density function, hence the probability density function for the waiting time is:
+
+\begin{equation}
+\Pi(T) = P(x(T)) \exp\left( -\int_0^T P(x(t)) \right)
+\label{pdf}
+\end{equation}
+
+and the expected time to complete phases 1 and 2 is $\int_0^{\infty} T \Pi(T) \ud T$. This is our first analytic approximation.  
+
+
+
+\end{document}
+
+
