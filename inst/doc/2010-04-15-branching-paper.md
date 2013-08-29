@@ -152,7 +152,7 @@ The Adaptive Dynamics of Branching
 ----------------------------------
 
 
-![](figure/jump_void2.png)
+![](http://farm4.staticflickr.com/3711/9624789620_a3f439eace_o.png)
 
 
 Evolutionary branching occurs in this model when the resource kernel is
@@ -359,11 +359,11 @@ and the expected time to complete phases 1 and 2 is
 $\int_0^{\infty} T \Pi(T) \mathrm{d}T$. This is our first analytic
 approximation.
 
-![](figure/myp.png)
+![](http://farm8.staticflickr.com/7306/9621553187_8bf5340eef_o.png)
 
-![](figure/mywaiting.png)
+![](http://farm6.staticflickr.com/5544/9621553385_dc4d6750fa_o.png)
 
-![](figure/waittimes.png)
+![](http://farm6.staticflickr.com/5549/9624790208_a866e5f8f1_o.png)
 
 Coexistence
 -----------

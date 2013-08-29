@@ -150,5 +150,5 @@ to the accidental loss of a set of coexisting types, as observed in the
 simulations. I am unclear as to the explanation.
 
 
-![](figure/u.png)
+![](http://farm4.staticflickr.com/3726/9621550031_05054cdb02_o.png)
 

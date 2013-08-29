@@ -31,7 +31,7 @@ bounded above by some integer $N$. The process is determined by two
 state-dependent rates, $b(n)$ and $d(n)$, as depicted here: 
 
 
-![](figure/markov.png)
+![](http://farm4.staticflickr.com/3723/9624787798_6899d87bc1_o.png)
 
 
 The process is specified by the Master equation:
