@@ -1,3 +1,26 @@
+---
+layout: post
+category: evolution
+tags:
+- adaptive-dynamics
+
+---
+
+**editorial note**: These notes pre-date the formal start of my online
+laboratory notebook, [Feb 2 2010: The Lab Notebook Goes Open](http://carlboettiger.info/2010/02/02/The-Lab-Notebook-Goes-Open-.html)
+and were adapted from a LaTeX document in which I kept notes on this topic
+during my summer at [IIASA](http://www.iiasa.ac.at/).  Lacking a proper notebook then, documents
+like this one were updated periodically and occassionally branched into
+new ones.  The post date represents the last time the 
+LaTeX document was edited in the course of that research. 
+
+
+--------------------------------------------------------------
+
+Abstact
+=======
+
+
 While empirical evidence leans almost entirely in favor of allopatric
 speciation, theoretical evolutionary models continue to suggest that
 sympatric speciation should be possible, even common. We show stochastic
@@ -128,11 +151,9 @@ variance $\sigma_{\mu}^2$.
 The Adaptive Dynamics of Branching
 ----------------------------------
 
-[h]
 
-![image](images/jump_void2.pdf)
+![](figure/jump_void2.png)
 
-[fig:pip]
 
 Evolutionary branching occurs in this model when the resource kernel is
 wider than the competition kernel, $\sigma_k > \sigma_c$ as discussed
@@ -338,11 +359,11 @@ and the expected time to complete phases 1 and 2 is
 $\int_0^{\infty} T \Pi(T) \mathrm{d}T$. This is our first analytic
 approximation.
 
-![image](images/myp)
+![](figure/myp.png)
 
-![image](images/mywaiting)
+![](figure/mywaiting.png)
 
-![image](images/waittimes)
+![](figure/waittimes.png)
 
 Coexistence
 -----------
@@ -513,9 +534,9 @@ $$\exp{- (\min(V(0), V(1)) - V(p^*) )}$$
 Results
 =======
 
-![image](images/short.jpg)
+![](figure/short.jpg)
 
-![image](images/long.jpg)
+![](figure/long.jpg)
 
 [fig:times]
 

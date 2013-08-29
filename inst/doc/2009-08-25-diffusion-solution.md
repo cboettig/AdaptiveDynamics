@@ -1,3 +1,22 @@
+---
+layout: post
+category: evolution
+tags:
+- adaptive-dynamics
+- derivation
+
+---
+
+**editorial note**: These notes pre-date the formal start of my online
+laboratory notebook, [Feb 2 2010: The Lab Notebook Goes Open](http://carlboettiger.info/2010/02/02/The-Lab-Notebook-Goes-Open-.html)
+and were adapted from a LaTeX document in which I kept notes on this topic
+during my summer at [IIASA](http://www.iiasa.ac.at/).  Lacking a proper notebook then, documents
+like this one were updated periodically and occassionally branched into
+new ones.  The post date represents the last time the 
+LaTeX document was edited in the course of that research. 
+
+-----------------------------------
+
 $$\begin{aligned}
 \mathrm{d}n_1 = r n_1 \left(1 -  \frac{n_1 + C(x_1, x_2) n_2}{K(x_1) } \right) \mathrm{d}t + \frac{1}{\sqrt{K_o} } \sqrt{r n_1 \left(1 +  \frac{n_1 + C(x_1, x_2) n_2}{K(x_1) } \right) } \mathrm{d}W_1\end{aligned}$$
 

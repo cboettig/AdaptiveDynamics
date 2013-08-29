@@ -1,3 +1,21 @@
+---
+layout: post
+category: evolution
+tags:
+- adaptive-dynamics
+
+---
+
+**editorial note**: These notes pre-date the formal start of my online
+laboratory notebook, [Feb 2 2010: The Lab Notebook Goes Open](http://carlboettiger.info/2010/02/02/The-Lab-Notebook-Goes-Open-.html)
+and were adapted from a LaTeX document in which I kept notes on this topic
+during my summer at [IIASA](http://www.iiasa.ac.at/).  Lacking a proper notebook then, documents
+like this one were updated periodically and occassionally branched into
+new ones.  The post date represents the last time the 
+LaTeX document was edited in the course of that research. 
+
+
+
 Extinction Probabilities
 ========================
 
@@ -10,14 +28,11 @@ changes, for the time being we will focus on the one-dimensional
 bith-death process. The Markov process is defined over positive
 integers, $n \in \mathbb{Z}^+$, and will sometimes be assumed to be
 bounded above by some integer $N$. The process is determined by two
-state-dependent rates, $b(n)$ and $d(n)$, as depicted in
-Figure [fig:markov].
+state-dependent rates, $b(n)$ and $d(n)$, as depicted here: 
 
-[h]
 
-![image](images/markov)
+![](figure/markov.png)
 
-[fig:markov]
 
 The process is specified by the Master equation:
 

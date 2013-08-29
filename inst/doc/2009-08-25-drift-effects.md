@@ -1,3 +1,22 @@
+---
+layout: post
+category: evolution
+tags:
+- adaptive-dynamics
+
+---
+
+**editorial note**: These notes pre-date the formal start of my online
+laboratory notebook, [Feb 2 2010: The Lab Notebook Goes Open](http://carlboettiger.info/2010/02/02/The-Lab-Notebook-Goes-Open-.html)
+and were adapted from a LaTeX document in which I kept notes on this topic
+during my summer at [IIASA](http://www.iiasa.ac.at/).  Lacking a proper notebook then, documents
+like this one were updated periodically and occassionally branched into
+new ones.  The post date represents the last time the 
+LaTeX document was edited in the course of that research. 
+
+
+-----------------------------------------
+
 We wish to establish the fate of a population into which a rare mutant
 is introduced near a branching point. Far from the branching point, we
 had only one concern – will the mutant survive? Near the branching
@@ -130,8 +149,6 @@ This seems unreasonable. A smaller population should be more suseptible
 to the accidental loss of a set of coexisting types, as observed in the
 simulations. I am unclear as to the explanation.
 
-[h]
 
-![image](images/u)
+![](figure/u.png)
 
-[fig:u]

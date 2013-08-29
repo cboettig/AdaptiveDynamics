@@ -1,3 +1,22 @@
+---
+layout: post
+category: evolution
+tags:
+- adaptive-dynamics
+
+---
+
+**editorial note**: These notes pre-date the formal start of my online
+laboratory notebook, [Feb 2 2010: The Lab Notebook Goes Open](http://carlboettiger.info/2010/02/02/The-Lab-Notebook-Goes-Open-.html)
+and were adapted from a LaTeX document in which I kept notes on this topic
+during my summer at [IIASA](http://www.iiasa.ac.at/).  Lacking a proper notebook then, documents
+like this one were updated periodically and occassionally branched into
+new ones.  The post date represents the last time the 
+LaTeX document was edited in the course of that research. 
+
+
+------------------------------------------------------------------------
+
 We consider the classic adaptive dynamics model for evolutionary
 branching under competition for a limiting resource by Dieckmann and
 Doebeli (1999). The population dynamics of $N(x,t)$ individuals each

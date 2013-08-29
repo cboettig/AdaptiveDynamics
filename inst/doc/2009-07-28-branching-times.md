@@ -1,3 +1,21 @@
+---
+layout: post
+category: evolution
+tags:
+- adaptive-dynamics
+
+---
+
+**editorial note**: These notes pre-date the formal start of my online
+laboratory notebook, [Feb 2 2010: The Lab Notebook Goes Open](http://carlboettiger.info/2010/02/02/The-Lab-Notebook-Goes-Open-.html)
+and were adapted from a LaTeX document in which I kept notes on this topic
+during my summer at [IIASA](http://www.iiasa.ac.at/).  Lacking a proper notebook then, documents
+like this one were updated periodically and occassionally branched into
+new ones.  The post date represents the last time the 
+LaTeX document was edited in the course of that research. 
+
+
+
 Introduction
 ============
 
@@ -161,11 +179,11 @@ and the expected time until branching is
 $\int_0^{\infty} T \Pi(T) \mathrm{d}T$. This is our first analytic
 approximation.
 
-![image](images/myp)
+![](http://farm4.staticflickr.com/3668/9624772024_ccb8ba0fb9_o.png)
 
-![image](images/mywaiting)
+![](http://farm6.staticflickr.com/5535/9624772196_d3fab3e33b_o.png)
 
-![image](images/waittimes)
+![](http://farm8.staticflickr.com/7403/9624772374_7e297716ab_o.png)
 
 $$\begin{gathered}
 P(x) = \frac{1}{2} \left(1+ {Erf}\left[\frac{x}{\sqrt{2} \sqrt{\sigma_{\mu}^2}}\right]\right)-\\
