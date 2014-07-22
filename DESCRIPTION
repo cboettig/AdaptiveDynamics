@@ -1,4 +1,4 @@
-Package: AdaptiveDynamics
+Package: BranchingTime 
 Type: C program 
 Title: Waiting Times for Evolutionary Branching in Adaptive Dynamics 
 Version: 0.0-3
