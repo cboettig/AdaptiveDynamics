@@ -1,9 +1,9 @@
 Package: BranchingTime 
 Type: C program 
 Title: Waiting Times for Evolutionary Branching in Adaptive Dynamics 
-Version: 0.0-3
+Version: 0.0-4
 Date: 2010-08-11
-Author: Carl Boettiger <cboettig@gmail.com>
+Author: Carl Boettiger <cboettig@gmail.com>, Ruppert Mazzucco, Ulf Dieckmann
 Maintainer: Carl Boettiger <cboettig@gmail.com>
 Description: Uses fast C++ code to implement individual ecological dynamics of births and deaths with occassional random mutations, resulting in evolutionary trajectories that can be captured using the tools of adaptive dynamics.  
 Depends: odesolve, snowfall 
