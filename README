@@ -6,10 +6,17 @@
                                            |___/                       
 INSTALL:
 
-Requires: gcc, STL, libpngwriter0-dev, libgsl0-dev
+Requires: gcc+STL (build-essential), libpngwriter0-dev, libgsl0-dev, libiomp-dev
 
+R-package install: `R CMD INSTALL .`
+
+Free-standing C++ installation:
+
+```bash
+cd src/
 make
 make parallel
+```
 
 RUN:
 

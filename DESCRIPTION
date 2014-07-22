@@ -7,6 +7,7 @@ Author: Carl Boettiger <cboettig@gmail.com>, Ruppert Mazzucco, Ulf Dieckmann
 Maintainer: Carl Boettiger <cboettig@gmail.com>
 Description: Uses fast C++ code to implement individual ecological dynamics of births and deaths with occassional random mutations, resulting in evolutionary trajectories that can be captured using the tools of adaptive dynamics.  
 Depends: odesolve, snowfall 
+SystemRequirements: GSL libraries (libgsl0-dev), OpenMP libraries (libiomp-dev)
 Recommends: 
 URL: http://carlboettiger.info/software.html
 License: CC0
