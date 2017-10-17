@@ -14,8 +14,11 @@
 A Fast C++ implementation with an R interface to simulate ecological and evolutionary dynamics of adaptive branching in a full Gillespie simulation following the model of Dieckmann and Doebeli (1999, https://doi.org/10.1038/22521).  This software was developed under as a IIASA YSSP 2009 summer project under the guidance of Ulf Dieckmann and Rupert Mazzucco.
 
 Background on the project apperas in the following notebook entries: 
+
 - http://www.carlboettiger.info/2009/07/28/branching-times.html
 - http://www.carlboettiger.info/2009/08/25/drift-effects.html
+- http://www.carlboettiger.info/2010/05/01/coexistence-of-the-early-dimorphism.html
+- Also see other notes: http://www.carlboettiger.info/2010/tags.html#adaptive-dynamics
 
 
 ## INSTALL:
