@@ -15,6 +15,7 @@ A Fast C++ implementation with an R interface to simulate ecological and evoluti
 
 Background on the project apperas in the following notebook entries: 
 
+- http://www.carlboettiger.info/2010/04/15/branching-paper.html
 - http://www.carlboettiger.info/2009/07/28/branching-times.html
 - http://www.carlboettiger.info/2009/08/25/drift-effects.html
 - http://www.carlboettiger.info/2010/05/01/coexistence-of-the-early-dimorphism.html
